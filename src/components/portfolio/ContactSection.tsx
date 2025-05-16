@@ -1,4 +1,3 @@
-
 import { Mail, Phone, MapPin } from "lucide-react";
 import { cn } from "@/lib/utils";
 import ContactItem from "./ContactItem";
@@ -6,8 +5,6 @@ import ContactItem from "./ContactItem";
 type ContactSectionProps = {
   isVisible: boolean;
 };
-
-/*teste*/
 
 const ContactSection = ({ isVisible }: ContactSectionProps) => {
   return (
@@ -31,9 +28,7 @@ const ContactSection = ({ isVisible }: ContactSectionProps) => {
         </div>
         
         <div className="max-w-4xl mx-auto mb-16">
-          {/* Aumentei o espaço entre os itens de contato e a próxima seção com mb-16 */}
           <div className="flex flex-wrap justify-center gap-12 mb-4">
-            {/* Substituí space-x-8 por gap-12 para melhor controle de espaçamento entre itens */}
             <ContactItem 
               icon={<Mail className="text-[#729ffa] transition-colors duration-300 group-hover:text-[#fffcff]" />} 
               title="Email" 
@@ -54,8 +49,7 @@ const ContactSection = ({ isVisible }: ContactSectionProps) => {
           </div>
         </div>
           
-        <div className="text-center pt-6">
-          {/* Adicionei padding-top (pt-6) para aumentar o espaço acima do título */}
+        <div className="text-center pt-6 mb-16">
           <h3 className="text-2xl font-bold mb-4 relative pb-4 text-[#729ffa] inline-block">
             Vamos trabalhar juntos
             <span className="absolute bottom-0 left-0 w-full h-[3px] bg-[#729ffa]"></span>
@@ -64,74 +58,84 @@ const ContactSection = ({ isVisible }: ContactSectionProps) => {
             Estou sempre aberto a novos projetos e oportunidades criativas. Use um dos canais acima ou preencha o formulário.
           </p>
         </div>
-      </div>
-          
-        <form action="https://formspree.io/f/xpwdkwjl" method="POST" className="bg-white/50 backdrop-blur-sm p-8 rounded-lg shadow-lg">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            <div className="text-center">
-              <label htmlFor="name" className="block mb-2 font-medium">
-                Nome Completo
+        
+        {/* Container para o formulário flutuante */}
+        <div className="max-w-3xl mx-auto relative">
+          <form 
+            action="https://formspree.io/f/xpwdkwjl" 
+            method="POST" 
+            className="bg-white p-8 md:p-10 rounded-xl shadow-2xl mx-4 md:mx-auto transform transition-all duration-500 hover:shadow-[0_20px_50px_rgba(114,159,250,0.2)] relative z-10 border border-[#efefef]/50"
+          >
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div className="text-center">
+                <label htmlFor="name" className="block mb-2 font-medium">
+                  Nome Completo
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  required
+                  className="w-full p-4 bg-[#fffcff] border border-[#efefef] rounded-md focus:outline-none focus:border-[#729ffa] focus:shadow-md focus:shadow-[#729ffa]/20 transition-all duration-300"
+                />
+              </div>
+              
+              <div className="text-center">
+                <label htmlFor="email" className="block mb-2 font-medium">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  required
+                  className="w-full p-4 bg-[#fffcff] border border-[#efefef] rounded-md focus:outline-none focus:border-[#729ffa] focus:shadow-md focus:shadow-[#729ffa]/20 transition-all duration-300"
+                />
+              </div>
+            </div>
+            
+            <div className="mb-6 text-center">
+              <label htmlFor="subject" className="block mb-2 font-medium">
+                Assunto
               </label>
               <input
                 type="text"
-                id="name"
-                name="name"
-                required
+                id="subject"
+                name="subject"
                 className="w-full p-4 bg-[#fffcff] border border-[#efefef] rounded-md focus:outline-none focus:border-[#729ffa] focus:shadow-md focus:shadow-[#729ffa]/20 transition-all duration-300"
               />
             </div>
             
-            <div className="text-center">
-              <label htmlFor="email" className="block mb-2 font-medium">
-                Email
+            <div className="mb-6 text-center">
+              <label htmlFor="message" className="block mb-2 font-medium">
+                Mensagem
               </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
+              <textarea
+                id="message"
+                name="message"
                 required
-                className="w-full p-4 bg-[#fffcff] border border-[#efefef] rounded-md focus:outline-none focus:border-[#729ffa] focus:shadow-md focus:shadow-[#729ffa]/20 transition-all duration-300"
-              />
+                maxLength={1000}
+                className="w-full p-4 bg-[#fffcff] border border-[#efefef] rounded-md min-h-[150px] resize-none focus:outline-none focus:border-[#729ffa] focus:shadow-md focus:shadow-[#729ffa]/20 transition-all duration-300"
+              ></textarea>
+              <p className="text-xs text-gray-500 mt-2">Limite de 1000 caracteres</p>
             </div>
-          </div>
+            
+            <div className="text-center">
+              <button
+                type="submit"
+                className="bg-[#729ffa] text-[#fffcff] px-8 py-3 rounded font-medium tracking-wider overflow-hidden relative hover:bg-[#5a87e6] hover:translate-y-[-2px] hover:shadow-lg hover:shadow-[#729ffa]/30 transition-all duration-300"
+              >
+                <span className="relative z-10">Enviar Mensagem</span>
+                <span className="absolute top-0 -left-full w-full h-full bg-white/10 transform transition-all duration-400 hover:left-full"></span>
+              </button>
+            </div>
+          </form>
           
-          <div className="mb-6 text-center">
-            <label htmlFor="subject" className="block mb-2 font-medium">
-              Assunto
-            </label>
-            <input
-              type="text"
-              id="subject"
-              name="subject"
-              className="w-full p-4 bg-[#fffcff] border border-[#efefef] rounded-md focus:outline-none focus:border-[#729ffa] focus:shadow-md focus:shadow-[#729ffa]/20 transition-all duration-300"
-            />
-          </div>
-          
-          <div className="mb-6 text-center">
-            <label htmlFor="message" className="block mb-2 font-medium">
-              Mensagem
-            </label>
-            <textarea
-              id="message"
-              name="message"
-              required
-              maxLength={1000}
-              className="w-full p-4 bg-[#fffcff] border border-[#efefef] rounded-md min-h-[150px] resize-none focus:outline-none focus:border-[#729ffa] focus:shadow-md focus:shadow-[#729ffa]/20 transition-all duration-300"
-            ></textarea>
-            <p className="text-xs text-gray-500 mt-2">Limite de 1000 caracteres</p>
-          </div>
-          
-          <div className="text-center">
-            <button
-              type="submit"
-              className="bg-[#729ffa] text-[#fffcff] px-8 py-3 rounded font-medium tracking-wider overflow-hidden relative hover:bg-[#5a87e6] hover:translate-y-[-2px] hover:shadow-lg hover:shadow-[#729ffa]/30 transition-all duration-300"
-            >
-              <span className="relative z-10">Enviar Mensagem</span>
-              <span className="absolute top-0 -left-full w-full h-full bg-white/10 transform transition-all duration-400 hover:left-full"></span>
-            </button>
-          </div>
-        </form>
-      </section>
+          {/* Elemento decorativo atrás do formulário para efeito de flutuação */}
+          <div className="absolute top-4 left-4 right-4 bottom-0 bg-[#729ffa]/5 rounded-xl -z-0 hidden md:block"></div>
+        </div>
+      </div>
+    </section>
   );
 };
 
