@@ -1,15 +1,24 @@
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X, ChevronRight, Mail, Phone, MapPin } from "lucide-react";
 import { cn } from "@/lib/utils";
 import backgroundImage from "/lovable-uploads/9f4fe2ac-86a3-44bf-ab5c-466be35b79be.png";
-import logoImage from "/lovable-uploads/631d3035-04e7-46f1-9c2d-20969e91ea79.png";
+import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
+
+// Slideshow background images
+const backgroundSlides = [
+  backgroundImage,
+  "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05",
+  "https://images.unsplash.com/photo-1500375592092-40eb2168fd21",
+  "https://images.unsplash.com/photo-1506744038136-46273834b3fb"
+];
 
 const Index = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
+  const [currentBgIndex, setCurrentBgIndex] = useState(0);
   const [sectionsVisible, setSectionsVisible] = useState<Record<string, boolean>>({
     photography: false,
     video: false,
@@ -18,6 +27,15 @@ const Index = () => {
     about: false,
     contact: false,
   });
+
+  // Background slideshow effect
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentBgIndex((prevIndex) => (prevIndex + 1) % backgroundSlides.length);
+    }, 8000); // Change slide every 8 seconds
+
+    return () => clearInterval(interval);
+  }, []);
 
   // Handle scroll effects
   useEffect(() => {
@@ -48,6 +66,19 @@ const Index = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Mouse parallax effect for about section
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const aboutImageRef = useRef<HTMLDivElement>(null);
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (aboutImageRef.current) {
+      const { left, top, width, height } = aboutImageRef.current.getBoundingClientRect();
+      const x = (e.clientX - left) / width - 0.5;
+      const y = (e.clientY - top) / height - 0.5;
+      setMousePosition({ x, y });
+    }
+  };
+
   // Smooth scroll to section
   const scrollToSection = (sectionId: string) => {
     const section = document.getElementById(sectionId);
@@ -58,20 +89,35 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen font-['Montserrat_Alternates',sans-serif] bg-[#fffcff] text-[#1C1C1C]">
+    <div className="min-h-screen font-['Montserrat_Alternates',sans-serif] text-[#1C1C1C] relative">
+      {/* Fixed Background with Slideshow */}
+      <div className="fixed inset-0 w-full h-full z-[-2]">
+        {backgroundSlides.map((slide, index) => (
+          <div 
+            key={index}
+            className={cn(
+              "absolute inset-0 bg-cover bg-center transition-opacity duration-2000",
+              currentBgIndex === index ? "opacity-30" : "opacity-0"
+            )}
+            style={{ backgroundImage: `url(${slide})` }}
+          />
+        ))}
+        <div className="absolute inset-0 bg-[#729ffa]/60 z-[-1]"></div>
+      </div>
+      
       {/* Header */}
       <header className={cn(
-        "fixed w-full top-0 z-50 transition-all duration-300 ease-in-out py-8 border-b border-[#729ffa] bg-[#fffcff]/95",
-        isScrolled && "py-4 shadow-md shadow-[#729ffa]/15"
+        "fixed w-full top-0 z-50 transition-all duration-300 ease-in-out py-8 border-b border-[#729ffa]",
+        isScrolled ? "py-4 bg-[#fffcff]/95 shadow-md shadow-[#729ffa]/15" : "bg-transparent"
       )}>
         <div className="container mx-auto px-6 flex justify-between items-center">
-          <div className="text-2xl font-bold relative transition-transform duration-300 hover:scale-105">
-            <img src={logoImage} alt="Sam Novakoski" className="h-10" />
+          <div className="text-2xl font-bold relative transition-transform duration-300 hover:scale-105 text-[#fffcff]">
+            Sam<span className="text-[#729ffa]">Novakoski</span>
           </div>
           
           {/* Mobile Menu Button */}
           <div 
-            className="md:hidden text-[#729ffa] text-2xl cursor-pointer transition-transform duration-300 hover:scale-110"
+            className="md:hidden text-[#fffcff] text-2xl cursor-pointer transition-transform duration-300 hover:scale-110"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
             {mobileMenuOpen ? <X /> : <Menu />}
@@ -95,13 +141,7 @@ const Index = () => {
       </header>
       
       {/* Hero Section */}
-      <section id="home" className="relative flex items-center min-h-screen bg-[#729ffa]">
-        <div
-          className="absolute inset-0 bg-cover bg-center opacity-80"
-          style={{ backgroundImage: `url(${backgroundImage})` }}
-        ></div>
-        <div className="absolute inset-0 bg-[#729ffa]/60"></div>
-        
+      <section id="home" className="relative flex items-center min-h-screen">
         <div className="container mx-auto px-6 relative z-10 animate-fadeIn">
           <div className="max-w-3xl">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-[#fffcff]">
@@ -121,97 +161,101 @@ const Index = () => {
         </div>
       </section>
       
-      {/* Photography Section */}
-      <PortfolioSection
-        id="photography"
-        title="Fotografia"
-        description="Capturo histórias através das lentes, criando imagens que expressam emoção."
-        isVisible={sectionsVisible.photography}
-        projects={[
-          {
-            title: "Série Eventos",
-            category: "Eventos",
-            description: "Criando histórias envolventes com a fotografia de eventos",
-            imageUrl: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05"
-          },
-          {
-            title: "Retratos Urbanos",
-            category: "Retratos",
-            description: "Capturando personalidades em cenários urbanos",
-            imageUrl: "https://images.unsplash.com/photo-1500375592092-40eb2168fd21"
-          },
-          {
-            title: "Natureza Viva",
-            category: "Paisagens",
-            description: "Explorando a beleza da natureza em suas diferentes formas",
-            imageUrl: "https://images.unsplash.com/photo-1426604966848-d7adac402bff"
-          },
-        ]}
-      />
+      {/* Portfolio Sections */}
+      <div className="space-y-8 mt-8">
+        {/* Photography Section */}
+        <PortfolioSection
+          id="photography"
+          title="Fotografia"
+          description="Capturo histórias através das lentes, criando imagens que expressam emoção."
+          isVisible={sectionsVisible.photography}
+          projects={[
+            {
+              title: "Série Eventos",
+              category: "Eventos",
+              description: "Criando histórias envolventes com a fotografia de eventos",
+              imageUrl: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05"
+            },
+            {
+              title: "Retratos Urbanos",
+              category: "Retratos",
+              description: "Capturando personalidades em cenários urbanos",
+              imageUrl: "https://images.unsplash.com/photo-1500375592092-40eb2168fd21"
+            },
+            {
+              title: "Natureza Viva",
+              category: "Paisagens",
+              description: "Explorando a beleza da natureza em suas diferentes formas",
+              imageUrl: "https://images.unsplash.com/photo-1426604966848-d7adac402bff"
+            },
+          ]}
+        />
+        
+        {/* Video Section */}
+        <PortfolioSection
+          id="video"
+          title="Vídeos"
+          description="Do conceito à edição final, crio narrativas visuais em movimento que capturam a essência do seu projeto com técnicas profissionais avançadas de edição."
+          isVisible={sectionsVisible.video}
+          projects={[
+            {
+              title: "Canal Leandro Ladeira",
+              category: "Vídeos para Youtube",
+              description: "Vídeos para youtube com técnicas avançadas de narrativa e edição profissional",
+              imageUrl: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7"
+            },
+            {
+              title: "Documentário Local",
+              category: "Documentário",
+              description: "Contando histórias reais com sensibilidade e profundidade",
+              imageUrl: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158"
+            }
+          ]}
+        />
+        
+        {/* Motion Design Section */}
+        <PortfolioSection
+          id="motion"
+          title="Motion Design"
+          description="Animações e elementos visuais dinâmicos que dão vida às ideias e elevam a experiência visual do espectador."
+          isVisible={sectionsVisible.motion}
+          projects={[
+            {
+              title: "Identidade Animada",
+              category: "Animação 2D",
+              description: "Logo animations e elementos de marca em movimento.",
+              imageUrl: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7"
+            }
+          ]}
+        />
+        
+        {/* Creative Section */}
+        <PortfolioSection
+          id="creative"
+          title="Criativos & Anúncios"
+          description="Produções que combinam estratégia e estética para transmitir mensagens de forma impactante."
+          isVisible={sectionsVisible.creative}
+          projects={[
+            {
+              title: "Criativos para divulgação de infoprodutos",
+              category: "Infoprodutos",
+              description: "Criativos produzidos para captação de leads com visuais impactantes.",
+              imageUrl: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158"
+            }
+          ]}
+        />
+      </div>
       
-      {/* Video Section */}
-      <PortfolioSection
-        id="video"
-        title="Vídeos"
-        description="Do conceito à edição final, crio narrativas visuais em movimento que capturam a essência do seu projeto com técnicas profissionais avançadas de edição."
-        isVisible={sectionsVisible.video}
-        projects={[
-          {
-            title: "Canal Leandro Ladeira",
-            category: "Vídeos para Youtube",
-            description: "Vídeos para youtube com técnicas avançadas de narrativa e edição profissional",
-            imageUrl: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7"
-          },
-          {
-            title: "Documentário Local",
-            category: "Documentário",
-            description: "Contando histórias reais com sensibilidade e profundidade",
-            imageUrl: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158"
-          }
-        ]}
-      />
-      
-      {/* Motion Design Section */}
-      <PortfolioSection
-        id="motion"
-        title="Motion Design"
-        description="Animações e elementos visuais dinâmicos que dão vida às ideias e elevam a experiência visual do espectador."
-        isVisible={sectionsVisible.motion}
-        projects={[
-          {
-            title: "Identidade Animada",
-            category: "Animação 2D",
-            description: "Logo animations e elementos de marca em movimento.",
-            imageUrl: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7"
-          }
-        ]}
-      />
-      
-      {/* Creative Section */}
-      <PortfolioSection
-        id="creative"
-        title="Criativos & Anúncios"
-        description="Produções que combinam estratégia e estética para transmitir mensagens de forma impactante."
-        isVisible={sectionsVisible.creative}
-        projects={[
-          {
-            title: "Criativos para divulgação de infoprodutos",
-            category: "Infoprodutos",
-            description: "Criativos produzidos para captação de leads com visuais impactantes.",
-            imageUrl: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158"
-          }
-        ]}
-      />
-      
-      {/* About Section */}
+      {/* About Section with Parallax */}
       <section 
         id="about" 
         className={cn(
-          "py-24 transition-all duration-800 ease-in-out opacity-0 transform translate-y-5",
+          "py-24 transition-all duration-800 ease-in-out opacity-0 transform translate-y-5 relative my-16",
           sectionsVisible.about && "opacity-100 translate-y-0"
         )}
       >
-        <div className="container mx-auto px-6">
+        <div className="absolute inset-0 bg-[#729ffa]/10 backdrop-blur-sm rounded-lg z-0"></div>
+        <div className="container mx-auto px-6 relative z-10">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold inline-block relative mb-4 text-[#729ffa]">
               Sobre Mim
@@ -223,12 +267,19 @@ const Index = () => {
           </div>
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="relative h-[450px] md:h-[400px] lg:h-[450px] rounded-lg overflow-hidden shadow-lg shadow-[#729ffa]/20">
+            <div 
+              ref={aboutImageRef}
+              className="relative h-[450px] md:h-[400px] lg:h-[450px] rounded-lg overflow-hidden shadow-lg shadow-[#729ffa]/20"
+              onMouseMove={handleMouseMove}
+            >
               <div className="absolute inset-0 bg-gradient-to-tr from-[#729ffa]/30 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-500 z-10"></div>
               <img 
                 src="https://images.unsplash.com/photo-1500375592092-40eb2168fd21" 
                 alt="Sam Novakoski" 
-                className="w-full h-full object-cover transition-transform duration-800 ease-in-out hover:scale-[1.03]" 
+                className="w-full h-full object-cover transition-transform duration-800 ease-in-out hover:scale-[1.03]"
+                style={{
+                  transform: `translateX(${mousePosition.x * 10}px) translateY(${mousePosition.y * 10}px) scale(1.1)`
+                }}
               />
             </div>
             
@@ -251,15 +302,16 @@ const Index = () => {
         </div>
       </section>
       
-      {/* Contact Section */}
+      {/* Contact Section - Redesigned and Centered */}
       <section 
         id="contact" 
         className={cn(
-          "py-24 transition-all duration-800 ease-in-out opacity-0 transform translate-y-5",
+          "py-24 transition-all duration-800 ease-in-out opacity-0 transform translate-y-5 my-16 relative",
           sectionsVisible.contact && "opacity-100 translate-y-0"
         )}
       >
-        <div className="container mx-auto px-6">
+        <div className="absolute inset-0 bg-[#729ffa]/10 backdrop-blur-sm rounded-lg z-0"></div>
+        <div className="container mx-auto px-6 relative z-10">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold inline-block relative mb-4 text-[#729ffa]">
               Contato
@@ -270,80 +322,18 @@ const Index = () => {
             </p>
           </div>
           
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            <div>
-              <div className="mb-8">
-                <h3 className="text-2xl font-bold mb-4 relative pb-4 text-[#729ffa]">
-                  Vamos trabalhar juntos
-                  <span className="absolute bottom-0 left-0 w-[50px] h-[3px] bg-[#729ffa]"></span>
-                </h3>
-                <p className="mb-6">
-                  Estou sempre aberto a novos projetos e oportunidades criativas. Use um dos canais abaixo para entrar em contato.
-                </p>
-              </div>
+          <div className="max-w-3xl mx-auto">
+            <div className="text-center mb-8">
+              <h3 className="text-2xl font-bold mb-4 relative pb-4 text-[#729ffa] inline-block">
+                Vamos trabalhar juntos
+                <span className="absolute bottom-0 left-0 w-full h-[3px] bg-[#729ffa]"></span>
+              </h3>
+              <p className="mb-6">
+                Estou sempre aberto a novos projetos e oportunidades criativas. Use um dos canais abaixo ou preencha o formulário.
+              </p>
             </div>
             
-            <div>
-              <form action="https://formspree.io/f/xpwdkwjl" method="POST">
-                <div className="mb-6">
-                  <label htmlFor="name" className="block mb-2 font-medium">
-                    Nome Completo
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    required
-                    className="w-full p-4 bg-[#fffcff] border border-[#efefef] rounded-md focus:outline-none focus:border-[#729ffa] focus:shadow-md focus:shadow-[#729ffa]/20 transition-all duration-300"
-                  />
-                </div>
-                
-                <div className="mb-6">
-                  <label htmlFor="email" className="block mb-2 font-medium">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    required
-                    className="w-full p-4 bg-[#fffcff] border border-[#efefef] rounded-md focus:outline-none focus:border-[#729ffa] focus:shadow-md focus:shadow-[#729ffa]/20 transition-all duration-300"
-                  />
-                </div>
-                
-                <div className="mb-6">
-                  <label htmlFor="subject" className="block mb-2 font-medium">
-                    Assunto
-                  </label>
-                  <input
-                    type="text"
-                    id="subject"
-                    name="subject"
-                    className="w-full p-4 bg-[#fffcff] border border-[#efefef] rounded-md focus:outline-none focus:border-[#729ffa] focus:shadow-md focus:shadow-[#729ffa]/20 transition-all duration-300"
-                  />
-                </div>
-                
-                <div className="mb-6">
-                  <label htmlFor="message" className="block mb-2 font-medium">
-                    Mensagem
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    required
-                    className="w-full p-4 bg-[#fffcff] border border-[#efefef] rounded-md min-h-[150px] resize-y focus:outline-none focus:border-[#729ffa] focus:shadow-md focus:shadow-[#729ffa]/20 transition-all duration-300"
-                  ></textarea>
-                </div>
-                
-                <button
-                  type="submit"
-                  className="bg-[#729ffa] text-[#fffcff] px-8 py-3 rounded font-medium tracking-wider overflow-hidden relative hover:bg-[#5a87e6] hover:translate-y-[-2px] hover:shadow-lg hover:shadow-[#729ffa]/30 transition-all duration-300"
-                >
-                  <span className="relative z-10">Enviar Mensagem</span>
-                  <span className="absolute top-0 -left-full w-full h-full bg-white/10 transform transition-all duration-400 hover:left-full"></span>
-                </button>
-              </form>
-
+            <div className="flex justify-center space-x-8 mb-12">
               <ContactItem 
                 icon={<Mail className="text-[#729ffa] transition-colors duration-300 group-hover:text-[#fffcff]" />} 
                 title="Email" 
@@ -361,15 +351,77 @@ const Index = () => {
                 title="Localização" 
                 content="Taguatinga, DF - Brasil" 
               />
-
-              
             </div>
+            
+            <form action="https://formspree.io/f/xpwdkwjl" method="POST" className="bg-white/50 backdrop-blur-sm p-8 rounded-lg shadow-lg">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div>
+                  <label htmlFor="name" className="block mb-2 font-medium">
+                    Nome Completo
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    required
+                    className="w-full p-4 bg-[#fffcff] border border-[#efefef] rounded-md focus:outline-none focus:border-[#729ffa] focus:shadow-md focus:shadow-[#729ffa]/20 transition-all duration-300"
+                  />
+                </div>
+                
+                <div>
+                  <label htmlFor="email" className="block mb-2 font-medium">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    required
+                    className="w-full p-4 bg-[#fffcff] border border-[#efefef] rounded-md focus:outline-none focus:border-[#729ffa] focus:shadow-md focus:shadow-[#729ffa]/20 transition-all duration-300"
+                  />
+                </div>
+              </div>
+              
+              <div className="mb-6">
+                <label htmlFor="subject" className="block mb-2 font-medium">
+                  Assunto
+                </label>
+                <input
+                  type="text"
+                  id="subject"
+                  name="subject"
+                  className="w-full p-4 bg-[#fffcff] border border-[#efefef] rounded-md focus:outline-none focus:border-[#729ffa] focus:shadow-md focus:shadow-[#729ffa]/20 transition-all duration-300"
+                />
+              </div>
+              
+              <div className="mb-6">
+                <label htmlFor="message" className="block mb-2 font-medium">
+                  Mensagem
+                </label>
+                <textarea
+                  id="message"
+                  name="message"
+                  required
+                  className="w-full p-4 bg-[#fffcff] border border-[#efefef] rounded-md min-h-[150px] resize-y focus:outline-none focus:border-[#729ffa] focus:shadow-md focus:shadow-[#729ffa]/20 transition-all duration-300"
+                ></textarea>
+              </div>
+              
+              <div className="text-center">
+                <button
+                  type="submit"
+                  className="bg-[#729ffa] text-[#fffcff] px-8 py-3 rounded font-medium tracking-wider overflow-hidden relative hover:bg-[#5a87e6] hover:translate-y-[-2px] hover:shadow-lg hover:shadow-[#729ffa]/30 transition-all duration-300"
+                >
+                  <span className="relative z-10">Enviar Mensagem</span>
+                  <span className="absolute top-0 -left-full w-full h-full bg-white/10 transform transition-all duration-400 hover:left-full"></span>
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </section>
       
       {/* Footer */}
-      <footer className="py-12 border-t border-[#efefef] text-center">
+      <footer className="py-12 border-t border-[#efefef] text-center relative bg-[#fffcff]/80 backdrop-blur-sm z-10">
         <div className="container mx-auto px-6">
           <div className="mb-8">
             <div className="text-2xl font-bold mb-4">
@@ -422,7 +474,7 @@ const NavItem = ({
     <button
       onClick={onClick}
       className={cn(
-        "text-[#1C1C1C] uppercase text-sm tracking-wider font-medium md:ml-8 my-4 md:my-0 py-1 relative",
+        "md:text-[#fffcff] text-[#1C1C1C] uppercase text-sm tracking-wider font-medium md:ml-8 my-4 md:my-0 py-1 relative",
         isActive && "text-[#729ffa]"
       )}
     >
@@ -460,11 +512,12 @@ const PortfolioSection = ({
     <section 
       id={id} 
       className={cn(
-        "py-24 transition-all duration-800 ease-in-out opacity-0 transform translate-y-5",
+        "py-12 transition-all duration-800 ease-in-out opacity-0 transform translate-y-5 relative",
         isVisible && "opacity-100 translate-y-0"
       )}
     >
-      <div className="container mx-auto px-6">
+      <div className="absolute inset-0 bg-[#fffcff]/80 backdrop-blur-sm rounded-lg z-0"></div>
+      <div className="container mx-auto px-6 relative z-10">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold inline-block relative mb-4 text-[#729ffa]">
             {title}
@@ -522,11 +575,11 @@ const ContactItem = ({
   content: string 
 }) => {
   return (
-    <div className="flex items-center mb-4 group transition-transform duration-300 hover:translate-x-1">
-      <div className="w-10 h-10 rounded-full bg-[#efefef] flex items-center justify-center mr-4 transition-all duration-300 group-hover:bg-[#729ffa] group-hover:rotate-[360deg]">
+    <div className="flex flex-col items-center group">
+      <div className="w-12 h-12 rounded-full bg-[#efefef] flex items-center justify-center mb-3 transition-all duration-300 group-hover:bg-[#729ffa] group-hover:rotate-[360deg] shadow-md">
         {icon}
       </div>
-      <div>
+      <div className="text-center">
         <h4 className="font-medium">{title}</h4>
         <p>{content}</p>
       </div>

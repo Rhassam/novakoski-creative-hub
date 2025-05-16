@@ -118,4 +118,8 @@
       transform: translateY(0);
     }
   }
+  
+  .transition-opacity.duration-2000 {
+    transition-duration: 2000ms;
+  }
 }
