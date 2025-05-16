@@ -43,15 +43,15 @@ const HeroSection = ({ scrollToSection }: HeroSectionProps) => {
         <div className="absolute inset-0 bg-white/90 z-[-1]"></div>
       </div>
 
-      <div className="container mx-auto px-6 relative z-10 animate-fadeIn">
-        <div className="max-w-3xl pl-4 md:pl-8 lg:pl-12">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-[#1C1C1C] text-center">
+      <div className="container mx-auto px-8 relative z-10 animate-fadeIn">
+        <div className="max-w-3xl ml-0">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-[#fffcff] text-left">
             Criando histórias visuais que impressionam
           </h1>
-          <p className="text-lg md:text-xl mb-8 max-w-2xl text-[#1C1C1C] text-center">
+          <p className="text-lg md:text-xl mb-8 max-w-2xl text-[#fffcff] text-left">
             Fotógrafo, Editor de Vídeo e Motion Designer focado em transformar conceitos criativos em experiências visuais memoráveis.
           </p>
-          <div className="flex justify-center">
+          <div className="flex justify-start">
             <button
               onClick={() => scrollToSection("photography")}
               className="bg-[#729ffa] text-white px-8 py-3 rounded font-medium tracking-wider overflow-hidden relative hover:bg-[#5a87e6] hover:translate-y-[-2px] hover:shadow-lg hover:shadow-[#729ffa]/30 transition-all duration-300"
