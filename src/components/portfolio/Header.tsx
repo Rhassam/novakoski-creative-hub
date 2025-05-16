@@ -30,7 +30,7 @@ const Header = ({ activeSection, scrollToSection }: HeaderProps) => {
       isScrolled ? "py-4 shadow-md shadow-[#729ffa]/15" : ""
     )}>
       <div className="container mx-auto px-6 flex justify-between items-center">
-        <div className="text-2xl font-bold relative transition-transform duration-300 hover:scale-105 text-[#1C1C1C]">
+        <div className="text-2xl font-bold relative transition-transform duration-300 hover:scale-105 text-[#1C1C1C] font-['Montserrat_Alternates',sans-serif]">
           Sam<span className="text-[#729ffa]">Novakoski</span>
         </div>
         

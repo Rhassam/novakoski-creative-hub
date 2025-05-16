@@ -56,7 +56,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen font-['Montserrat_Alternates',sans-serif] text-[#1C1C1C] relative">
+    <div className="min-h-screen font-['Montserrat',sans-serif] text-[#1C1C1C] relative">
       {/* Sam Novakoski background for portfolio sections */}
       <div className="fixed inset-0 w-full h-full z-[-2]">
         <div 
@@ -80,18 +80,21 @@ const Index = () => {
           isVisible={sectionsVisible.photography}
           projects={[
             {
+              id: "serie-eventos",
               title: "Série Eventos",
               category: "Eventos",
               description: "Criando histórias envolventes com a fotografia de eventos",
               imageUrl: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05"
             },
             {
+              id: "retratos-urbanos",
               title: "Retratos Urbanos",
               category: "Retratos",
               description: "Capturando personalidades em cenários urbanos",
               imageUrl: "https://images.unsplash.com/photo-1500375592092-40eb2168fd21"
             },
             {
+              id: "natureza-viva",
               title: "Natureza Viva",
               category: "Paisagens",
               description: "Explorando a beleza da natureza em suas diferentes formas",
@@ -108,12 +111,14 @@ const Index = () => {
           isVisible={sectionsVisible.video}
           projects={[
             {
+              id: "canal-leandro-ladeira",
               title: "Canal Leandro Ladeira",
               category: "Vídeos para Youtube",
               description: "Vídeos para youtube com técnicas avançadas de narrativa e edição profissional",
               imageUrl: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7"
             },
             {
+              id: "documentario-local",
               title: "Documentário Local",
               category: "Documentário",
               description: "Contando histórias reais com sensibilidade e profundidade",
@@ -130,6 +135,7 @@ const Index = () => {
           isVisible={sectionsVisible.motion}
           projects={[
             {
+              id: "identidade-animada",
               title: "Identidade Animada",
               category: "Animação 2D",
               description: "Logo animations e elementos de marca em movimento.",
@@ -146,6 +152,7 @@ const Index = () => {
           isVisible={sectionsVisible.creative}
           projects={[
             {
+              id: "criativos-infoprodutos",
               title: "Criativos para divulgação de infoprodutos",
               category: "Infoprodutos",
               description: "Criativos produzidos para captação de leads com visuais impactantes.",

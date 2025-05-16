@@ -23,23 +23,13 @@ const ContactSection = ({ isVisible }: ContactSectionProps) => {
             Contato
             <span className="absolute bottom-[-10px] left-1/2 transform -translate-x-1/2 w-[60px] h-[3px] bg-[#729ffa]"></span>
           </h2>
-          <p className="max-w-2xl mx-auto text-[#1C1C1C]">
+          <p className="max-w-2xl mx-auto text-[#1C1C1C] text-center">
             Gostou do meu trabalho? Entre em contato para conversarmos sobre o seu projeto.
           </p>
         </div>
         
         <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-8">
-            <h3 className="text-2xl font-bold mb-4 relative pb-4 text-[#729ffa] inline-block">
-              Vamos trabalhar juntos
-              <span className="absolute bottom-0 left-0 w-full h-[3px] bg-[#729ffa]"></span>
-            </h3>
-            <p className="mb-6">
-              Estou sempre aberto a novos projetos e oportunidades criativas. Use um dos canais abaixo ou preencha o formulário.
-            </p>
-          </div>
-          
-          <div className="flex justify-center space-x-8 mb-12">
+          <div className="flex justify-center space-x-8 mb-8">
             <ContactItem 
               icon={<Mail className="text-[#729ffa] transition-colors duration-300 group-hover:text-[#fffcff]" />} 
               title="Email" 
@@ -59,9 +49,19 @@ const ContactSection = ({ isVisible }: ContactSectionProps) => {
             />
           </div>
           
+          <div className="text-center mb-8">
+            <h3 className="text-2xl font-bold mb-4 relative pb-4 text-[#729ffa] inline-block">
+              Vamos trabalhar juntos
+              <span className="absolute bottom-0 left-0 w-full h-[3px] bg-[#729ffa]"></span>
+            </h3>
+            <p className="mb-6 text-center">
+              Estou sempre aberto a novos projetos e oportunidades criativas. Use um dos canais acima ou preencha o formulário.
+            </p>
+          </div>
+          
           <form action="https://formspree.io/f/xpwdkwjl" method="POST" className="bg-white/50 backdrop-blur-sm p-8 rounded-lg shadow-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-              <div>
+              <div className="text-center">
                 <label htmlFor="name" className="block mb-2 font-medium">
                   Nome Completo
                 </label>
@@ -74,7 +74,7 @@ const ContactSection = ({ isVisible }: ContactSectionProps) => {
                 />
               </div>
               
-              <div>
+              <div className="text-center">
                 <label htmlFor="email" className="block mb-2 font-medium">
                   Email
                 </label>
@@ -88,7 +88,7 @@ const ContactSection = ({ isVisible }: ContactSectionProps) => {
               </div>
             </div>
             
-            <div className="mb-6">
+            <div className="mb-6 text-center">
               <label htmlFor="subject" className="block mb-2 font-medium">
                 Assunto
               </label>
@@ -100,7 +100,7 @@ const ContactSection = ({ isVisible }: ContactSectionProps) => {
               />
             </div>
             
-            <div className="mb-6">
+            <div className="mb-6 text-center">
               <label htmlFor="message" className="block mb-2 font-medium">
                 Mensagem
               </label>
@@ -108,8 +108,10 @@ const ContactSection = ({ isVisible }: ContactSectionProps) => {
                 id="message"
                 name="message"
                 required
-                className="w-full p-4 bg-[#fffcff] border border-[#efefef] rounded-md min-h-[150px] resize-y focus:outline-none focus:border-[#729ffa] focus:shadow-md focus:shadow-[#729ffa]/20 transition-all duration-300"
+                maxLength={1000}
+                className="w-full p-4 bg-[#fffcff] border border-[#efefef] rounded-md min-h-[150px] resize-none focus:outline-none focus:border-[#729ffa] focus:shadow-md focus:shadow-[#729ffa]/20 transition-all duration-300"
               ></textarea>
+              <p className="text-xs text-gray-500 mt-2">Limite de 1000 caracteres</p>
             </div>
             
             <div className="text-center">

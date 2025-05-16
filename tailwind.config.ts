@@ -20,7 +20,8 @@ export default {
 		},
 		extend: {
 			fontFamily: {
-				sans: ['Montserrat Alternates', 'sans-serif'],
+				sans: ['Montserrat', 'sans-serif'],
+				'montserrat-alt': ['Montserrat Alternates', 'sans-serif'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',

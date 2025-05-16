@@ -20,7 +20,7 @@ const NavItem = ({ label, sectionId, isActive, onClick }: NavItemProps) => {
       {label}
       <span 
         className={cn(
-          "absolute bottom-0 left-0 w-0 h-0.5 bg-[#729ffa] transition-all duration-300 group-hover:w-full hover:w-full",
+          "absolute bottom-0 left-0 w-0 h-0.5 bg-[#729ffa] transition-all duration-300 hover:w-full",
           isActive && "w-full"
         )}
       ></span>

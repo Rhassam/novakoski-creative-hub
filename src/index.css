@@ -1,5 +1,5 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Montserrat+Alternates:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -99,7 +99,11 @@
   }
 
   body {
-    @apply bg-background text-foreground font-['Montserrat_Alternates',sans-serif];
+    @apply bg-background text-foreground font-['Montserrat',sans-serif];
+  }
+
+  h1, h2, h3, .logo {
+    @apply font-['Montserrat_Alternates',sans-serif];
   }
 }
 

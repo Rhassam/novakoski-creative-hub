@@ -11,7 +11,7 @@ const Footer = ({ scrollToSection }: FooterProps) => {
     <footer className="py-12 border-t border-[#efefef] text-center relative bg-[#fffcff]/80 backdrop-blur-sm z-10">
       <div className="container mx-auto px-6">
         <div className="mb-8">
-          <div className="text-2xl font-bold mb-4">
+          <div className="text-2xl font-bold mb-4 font-['Montserrat_Alternates',sans-serif]">
             Sam<span className="text-[#729ffa]">Novakoski</span>
           </div>
           <p>Criando experiências visuais impactantes</p>
