@@ -18,7 +18,7 @@ const ContactSection = ({ isVisible }: ContactSectionProps) => {
     >
       <div className="absolute inset-0 bg-white shadow-lg rounded-lg z-0"></div>
       <div className="container mx-auto px-6 relative z-10">
-        <div className="text-center mb-16">
+        <div className="text-center mb-12">
           <h2 className="text-4xl font-bold inline-block relative mb-4 text-[#729ffa]">
             Contato
             <span className="absolute bottom-[-10px] left-1/2 transform -translate-x-1/2 w-[60px] h-[3px] bg-[#729ffa]"></span>
@@ -28,8 +28,10 @@ const ContactSection = ({ isVisible }: ContactSectionProps) => {
           </p>
         </div>
         
-        <div className="max-w-3xl mx-auto">
-          <div className="flex justify-center space-x-8 mb-8">
+        <div className="max-w-4xl mx-auto mb-16">
+          {/* Aumentei o espaço entre os itens de contato e a próxima seção com mb-16 */}
+          <div className="flex flex-wrap justify-center gap-12 mb-4">
+            {/* Substituí space-x-8 por gap-12 para melhor controle de espaçamento entre itens */}
             <ContactItem 
               icon={<Mail className="text-[#729ffa] transition-colors duration-300 group-hover:text-[#fffcff]" />} 
               title="Email" 
@@ -48,16 +50,19 @@ const ContactSection = ({ isVisible }: ContactSectionProps) => {
               content="Taguatinga, DF - Brasil" 
             />
           </div>
+        </div>
           
-          <div className="text-center mb-8">
-            <h3 className="text-2xl font-bold mb-4 relative pb-4 text-[#729ffa] inline-block">
-              Vamos trabalhar juntos
-              <span className="absolute bottom-0 left-0 w-full h-[3px] bg-[#729ffa]"></span>
-            </h3>
-            <p className="mb-6 text-center">
-              Estou sempre aberto a novos projetos e oportunidades criativas. Use um dos canais acima ou preencha o formulário.
-            </p>
-          </div>
+        <div className="text-center pt-6">
+          {/* Adicionei padding-top (pt-6) para aumentar o espaço acima do título */}
+          <h3 className="text-2xl font-bold mb-4 relative pb-4 text-[#729ffa] inline-block">
+            Vamos trabalhar juntos
+            <span className="absolute bottom-0 left-0 w-full h-[3px] bg-[#729ffa]"></span>
+          </h3>
+          <p className="mb-6 text-center max-w-2xl mx-auto">
+            Estou sempre aberto a novos projetos e oportunidades criativas. Use um dos canais acima ou preencha o formulário.
+          </p>
+        </div>
+      </div>
           
           <form action="https://formspree.io/f/xpwdkwjl" method="POST" className="bg-white/50 backdrop-blur-sm p-8 rounded-lg shadow-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
