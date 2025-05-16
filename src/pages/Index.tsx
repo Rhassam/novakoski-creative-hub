@@ -281,24 +281,6 @@ const Index = () => {
                   Estou sempre aberto a novos projetos e oportunidades criativas. Use um dos canais abaixo para entrar em contato.
                 </p>
               </div>
-              
-              <ContactItem 
-                icon={<Mail className="text-[#729ffa] transition-colors duration-300 group-hover:text-[#fffcff]" />} 
-                title="Email" 
-                content="samcontato@proton.me" 
-              />
-              
-              <ContactItem 
-                icon={<Phone className="text-[#729ffa] transition-colors duration-300 group-hover:text-[#fffcff]" />} 
-                title="Telefone" 
-                content="+55 (99) 99118-1892" 
-              />
-              
-              <ContactItem 
-                icon={<MapPin className="text-[#729ffa] transition-colors duration-300 group-hover:text-[#fffcff]" />} 
-                title="Localização" 
-                content="Taguatinga, DF - Brasil" 
-              />
             </div>
             
             <div>
@@ -361,6 +343,26 @@ const Index = () => {
                   <span className="absolute top-0 -left-full w-full h-full bg-white/10 transform transition-all duration-400 hover:left-full"></span>
                 </button>
               </form>
+
+              <ContactItem 
+                icon={<Mail className="text-[#729ffa] transition-colors duration-300 group-hover:text-[#fffcff]" />} 
+                title="Email" 
+                content="samcontato@proton.me" 
+              />
+              
+              <ContactItem 
+                icon={<Phone className="text-[#729ffa] transition-colors duration-300 group-hover:text-[#fffcff]" />} 
+                title="Telefone" 
+                content="+55 (99) 99118-1892" 
+              />
+              
+              <ContactItem 
+                icon={<MapPin className="text-[#729ffa] transition-colors duration-300 group-hover:text-[#fffcff]" />} 
+                title="Localização" 
+                content="Taguatinga, DF - Brasil" 
+              />
+
+              
             </div>
           </div>
         </div>
