@@ -7,6 +7,8 @@ type ContactSectionProps = {
   isVisible: boolean;
 };
 
+/*teste*/
+
 const ContactSection = ({ isVisible }: ContactSectionProps) => {
   return (
     <section 
