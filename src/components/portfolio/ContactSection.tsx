@@ -1,12 +1,68 @@
-import { Mail, Phone, MapPin } from "lucide-react";
+import { Mail, Phone, MapPin, X, CheckCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import ContactItem from "./ContactItem";
+import { useState, FormEvent, useRef } from "react";
 
 type ContactSectionProps = {
   isVisible: boolean;
 };
 
+// Adicionar estilo para animação
+const animateFadeIn = `
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+`;
+
 const ContactSection = ({ isVisible }: ContactSectionProps) => {
+  const [showThankYou, setShowThankYou] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    
+    if (!formRef.current) return;
+    
+    try {
+      // Mostrar estado de carregamento
+      setIsSubmitting(true);
+      
+      // Criar FormData do formulário atual
+      const formData = new FormData(formRef.current);
+      
+      // Enviar dados para o Formspree
+      const response = await fetch("https://formspree.io/f/xpwdkwjl", {
+        method: "POST",
+        body: formData,
+        headers: {
+          Accept: "application/json",
+        },
+      });
+      
+      if (response.ok) {
+        // Mostrar popup de agradecimento
+        setShowThankYou(true);
+        
+        // Limpar o formulário
+        formRef.current.reset();
+      } else {
+        // Se houver erro, alertar o usuário
+        console.error("Erro ao enviar formulário");
+        alert("Ocorreu um erro ao enviar sua mensagem. Por favor, tente novamente.");
+      }
+    } catch (error) {
+      console.error("Erro:", error);
+      alert("Ocorreu um erro ao enviar sua mensagem. Por favor, tente novamente.");
+    } finally {
+      // Remover estado de carregamento
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <section 
       id="contact" 
@@ -15,6 +71,9 @@ const ContactSection = ({ isVisible }: ContactSectionProps) => {
         isVisible && "opacity-100 translate-y-0"
       )}
     >
+      {/* Estilos para animações */}
+      <style jsx>{animateFadeIn}</style>
+      
       <div className="absolute inset-0 bg-white shadow-lg rounded-lg z-0"></div>
       <div className="container mx-auto px-6 relative z-10">
         <div className="text-center mb-12">
@@ -62,6 +121,8 @@ const ContactSection = ({ isVisible }: ContactSectionProps) => {
         {/* Container para o formulário flutuante */}
         <div className="max-w-3xl mx-auto relative">
           <form 
+            ref={formRef}
+            onSubmit={handleSubmit}
             action="https://formspree.io/f/xpwdkwjl" 
             method="POST" 
             className="bg-white p-8 md:p-10 rounded-xl shadow-2xl mx-4 md:mx-auto transform transition-all duration-500 hover:shadow-[0_20px_50px_rgba(114,159,250,0.2)] relative z-10 border border-[#efefef]/50"
@@ -123,9 +184,12 @@ const ContactSection = ({ isVisible }: ContactSectionProps) => {
             <div className="text-center">
               <button
                 type="submit"
-                className="bg-[#729ffa] text-[#fffcff] px-8 py-3 rounded font-medium tracking-wider overflow-hidden relative hover:bg-[#5a87e6] hover:translate-y-[-2px] hover:shadow-lg hover:shadow-[#729ffa]/30 transition-all duration-300"
+                disabled={isSubmitting}
+                className="bg-[#729ffa] text-[#fffcff] px-8 py-3 rounded font-medium tracking-wider overflow-hidden relative hover:bg-[#5a87e6] hover:translate-y-[-2px] hover:shadow-lg hover:shadow-[#729ffa]/30 transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed"
               >
-                <span className="relative z-10">Enviar Mensagem</span>
+                <span className="relative z-10">
+                  {isSubmitting ? "Enviando..." : "Enviar Mensagem"}
+                </span>
                 <span className="absolute top-0 -left-full w-full h-full bg-white/10 transform transition-all duration-400 hover:left-full"></span>
               </button>
             </div>
@@ -134,6 +198,37 @@ const ContactSection = ({ isVisible }: ContactSectionProps) => {
           {/* Elemento decorativo atrás do formulário para efeito de flutuação */}
           <div className="absolute top-4 left-4 right-4 bottom-0 bg-[#729ffa]/5 rounded-xl -z-0 hidden md:block"></div>
         </div>
+
+        {/* Thank You Modal */}
+        {showThankYou && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg shadow-2xl p-8 max-w-md w-full mx-4 animate-fadeIn relative">
+              <button 
+                onClick={() => setShowThankYou(false)} 
+                className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+                aria-label="Fechar"
+              >
+                <X size={24} />
+              </button>
+              
+              <div className="text-center">
+                <div className="flex justify-center mb-4">
+                  <CheckCircle size={48} className="text-green-500" />
+                </div>
+                <h3 className="text-2xl font-bold mb-2 text-[#729ffa]">Obrigado por entrar em contato!</h3>
+                <p className="text-gray-600 mb-6">
+                  Sua mensagem foi enviada com sucesso. Responderei o mais breve possível.
+                </p>
+                <button
+                  onClick={() => setShowThankYou(false)}
+                  className="bg-[#729ffa] text-[#fffcff] px-6 py-2 rounded font-medium hover:bg-[#5a87e6] transition-colors duration-300"
+                >
+                  Fechar
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );
