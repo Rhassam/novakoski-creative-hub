@@ -122,4 +122,8 @@
   .transition-opacity.duration-2000 {
     transition-duration: 2000ms;
   }
+  
+  .text-justify {
+    text-align: justify;
+  }
 }

@@ -6,8 +6,8 @@ import { cn } from "@/lib/utils";
 import backgroundImage from "/lovable-uploads/9f4fe2ac-86a3-44bf-ab5c-466be35b79be.png";
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 
-// Slideshow background images
-const backgroundSlides = [
+// Slideshow background images for hero section only
+const heroSlides = [
   backgroundImage,
   "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05",
   "https://images.unsplash.com/photo-1500375592092-40eb2168fd21",
@@ -28,10 +28,10 @@ const Index = () => {
     contact: false,
   });
 
-  // Background slideshow effect
+  // Background slideshow effect for hero section
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentBgIndex((prevIndex) => (prevIndex + 1) % backgroundSlides.length);
+      setCurrentBgIndex((prevIndex) => (prevIndex + 1) % heroSlides.length);
     }, 8000); // Change slide every 8 seconds
 
     return () => clearInterval(interval);
@@ -90,42 +90,37 @@ const Index = () => {
 
   return (
     <div className="min-h-screen font-['Montserrat_Alternates',sans-serif] text-[#1C1C1C] relative">
-      {/* Fixed Background with Slideshow */}
+      {/* Sam Novakoski background for portfolio sections */}
       <div className="fixed inset-0 w-full h-full z-[-2]">
-        {backgroundSlides.map((slide, index) => (
-          <div 
-            key={index}
-            className={cn(
-              "absolute inset-0 bg-cover bg-center transition-opacity duration-2000",
-              currentBgIndex === index ? "opacity-30" : "opacity-0"
-            )}
-            style={{ backgroundImage: `url(${slide})` }}
-          />
-        ))}
-        <div className="absolute inset-0 bg-[#729ffa]/60 z-[-1]"></div>
+        <div 
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url(${backgroundImage})`, opacity: 0.15 }}
+        />
+        <div className="absolute inset-0 bg-[#729ffa]/30 z-[-1]"></div>
       </div>
       
-      {/* Header */}
+      {/* Header - Now with solid white background */}
       <header className={cn(
         "fixed w-full top-0 z-50 transition-all duration-300 ease-in-out py-8 border-b border-[#729ffa]",
-        isScrolled ? "py-4 bg-[#fffcff]/95 shadow-md shadow-[#729ffa]/15" : "bg-transparent"
+        "bg-white", // Always white background
+        isScrolled ? "py-4 shadow-md shadow-[#729ffa]/15" : ""
       )}>
         <div className="container mx-auto px-6 flex justify-between items-center">
-          <div className="text-2xl font-bold relative transition-transform duration-300 hover:scale-105 text-[#fffcff]">
+          <div className="text-2xl font-bold relative transition-transform duration-300 hover:scale-105 text-[#1C1C1C]">
             Sam<span className="text-[#729ffa]">Novakoski</span>
           </div>
           
           {/* Mobile Menu Button */}
           <div 
-            className="md:hidden text-[#fffcff] text-2xl cursor-pointer transition-transform duration-300 hover:scale-110"
+            className="md:hidden text-[#1C1C1C] text-2xl cursor-pointer transition-transform duration-300 hover:scale-110"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
             {mobileMenuOpen ? <X /> : <Menu />}
           </div>
           
-          {/* Navigation */}
+          {/* Navigation with hover effect */}
           <nav className={cn(
-            "fixed md:relative top-0 h-screen md:h-auto w-[280px] md:w-auto bg-[#fffcff] md:bg-transparent flex flex-col md:flex-row items-start md:items-center pt-20 md:pt-0 px-8 md:px-0 transition-all duration-300 ease-in-out z-[49] shadow-[-5px_0_15px_rgba(114,159,250,0.1)] md:shadow-none",
+            "fixed md:relative top-0 h-screen md:h-auto w-[280px] md:w-auto bg-white md:bg-transparent flex flex-col md:flex-row items-start md:items-center pt-20 md:pt-0 px-8 md:px-0 transition-all duration-300 ease-in-out z-[49] shadow-[-5px_0_15px_rgba(114,159,250,0.1)] md:shadow-none",
             mobileMenuOpen ? "right-0" : "-right-[300px]",
             "md:right-0"
           )}>
@@ -140,14 +135,29 @@ const Index = () => {
         </div>
       </header>
       
-      {/* Hero Section */}
+      {/* Hero Section with slideshow */}
       <section id="home" className="relative flex items-center min-h-screen">
+        {/* Hero section slideshow */}
+        <div className="absolute inset-0 w-full h-full z-[-1]">
+          {heroSlides.map((slide, index) => (
+            <div 
+              key={index}
+              className={cn(
+                "absolute inset-0 bg-cover bg-center transition-opacity duration-2000",
+                currentBgIndex === index ? "opacity-30" : "opacity-0"
+              )}
+              style={{ backgroundImage: `url(${slide})` }}
+            />
+          ))}
+          <div className="absolute inset-0 bg-[#729ffa]/60 z-[-1]"></div>
+        </div>
+
         <div className="container mx-auto px-6 relative z-10 animate-fadeIn">
           <div className="max-w-3xl">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-[#fffcff]">
               Criando histórias visuais que impressionam
             </h1>
-            <p className="text-lg md:text-xl mb-8 max-w-2xl text-[#fffcff]">
+            <p className="text-lg md:text-xl mb-8 max-w-2xl text-[#fffcff] text-justify">
               Fotógrafo, Editor de Vídeo e Motion Designer focado em transformar conceitos criativos em experiências visuais memoráveis.
             </p>
             <button
@@ -246,7 +256,7 @@ const Index = () => {
         />
       </div>
       
-      {/* About Section with Parallax */}
+      {/* About Section with Parallax - White background */}
       <section 
         id="about" 
         className={cn(
@@ -254,7 +264,7 @@ const Index = () => {
           sectionsVisible.about && "opacity-100 translate-y-0"
         )}
       >
-        <div className="absolute inset-0 bg-[#729ffa]/10 backdrop-blur-sm rounded-lg z-0"></div>
+        <div className="absolute inset-0 bg-white shadow-lg rounded-lg z-0"></div>
         <div className="container mx-auto px-6 relative z-10">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold inline-block relative mb-4 text-[#729ffa]">
@@ -288,13 +298,13 @@ const Index = () => {
                 Olá, sou Sam Novakoski
                 <span className="absolute bottom-0 left-0 w-[60px] h-[3px] bg-[#729ffa]"></span>
               </h3>
-              <p className="mb-4">
+              <p className="mb-4 text-justify">
                 Sou um profissional audiovisual com mais de 7 anos de experiência na criação de conteúdo visual. Meu trabalho busca combinar aspectos técnicos e artísticos para criar narrativas visuais impactantes.
               </p>
-              <p className="mb-4">
+              <p className="mb-4 text-justify">
                 Com formação em Marketing e especializações em Edição de Vídeo e Motion Design, desenvolvi projetos para diversos clientes e marcas ao longo da minha carreira, sempre buscando inovação e excelência técnica em fotografia, edição de vídeo e motion design.
               </p>
-              <p>
+              <p className="text-justify">
                 Minha abordagem criativa combina uma visão contemporânea e moderna, resultando em um estilo único e reconhecível em cada trabalho.
               </p>
             </div>
@@ -302,7 +312,7 @@ const Index = () => {
         </div>
       </section>
       
-      {/* Contact Section - Redesigned and Centered */}
+      {/* Contact Section - Centered, with white background */}
       <section 
         id="contact" 
         className={cn(
@@ -310,7 +320,7 @@ const Index = () => {
           sectionsVisible.contact && "opacity-100 translate-y-0"
         )}
       >
-        <div className="absolute inset-0 bg-[#729ffa]/10 backdrop-blur-sm rounded-lg z-0"></div>
+        <div className="absolute inset-0 bg-white shadow-lg rounded-lg z-0"></div>
         <div className="container mx-auto px-6 relative z-10">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold inline-block relative mb-4 text-[#729ffa]">
@@ -458,7 +468,7 @@ const Index = () => {
   );
 };
 
-// Component for navigation items
+// Component for navigation items - updated with hover effect
 const NavItem = ({ 
   label, 
   sectionId, 
@@ -474,14 +484,14 @@ const NavItem = ({
     <button
       onClick={onClick}
       className={cn(
-        "md:text-[#fffcff] text-[#1C1C1C] uppercase text-sm tracking-wider font-medium md:ml-8 my-4 md:my-0 py-1 relative",
+        "md:text-[#1C1C1C] text-[#1C1C1C] uppercase text-sm tracking-wider font-medium md:ml-8 my-4 md:my-0 py-1 relative",
         isActive && "text-[#729ffa]"
       )}
     >
       {label}
       <span 
         className={cn(
-          "absolute bottom-0 left-0 w-0 h-0.5 bg-[#729ffa] transition-all duration-300",
+          "absolute bottom-0 left-0 w-0 h-0.5 bg-[#729ffa] transition-all duration-300 group-hover:w-full hover:w-full",
           isActive && "w-full"
         )}
       ></span>
@@ -489,7 +499,7 @@ const NavItem = ({
   );
 };
 
-// Component for portfolio sections
+// Component for portfolio sections - updated with better text padding
 const PortfolioSection = ({ 
   id, 
   title, 
@@ -523,7 +533,7 @@ const PortfolioSection = ({
             {title}
             <span className="absolute bottom-[-10px] left-1/2 transform -translate-x-1/2 w-[60px] h-[3px] bg-[#729ffa]"></span>
           </h2>
-          <p className="max-w-2xl mx-auto text-[#1C1C1C]">
+          <p className="max-w-2xl mx-auto text-[#1C1C1C] text-justify">
             {description}
           </p>
         </div>
@@ -542,14 +552,14 @@ const PortfolioSection = ({
                   className="w-full h-full object-cover transition-transform duration-800 ease-in-out hover:scale-110" 
                 />
               </div>
-              <div className="p-6">
+              <div className="p-8">
                 <div className="text-[#729ffa] text-xs uppercase tracking-wider font-medium mb-2">
                   {project.category}
                 </div>
                 <h3 className="text-xl font-medium mb-2 transition-colors duration-300 group-hover:text-[#729ffa]">
                   {project.title}
                 </h3>
-                <p className="text-sm text-[#1C1C1C] mb-4">
+                <p className="text-sm text-[#1C1C1C] mb-4 text-justify">
                   {project.description}
                 </p>
                 <Link to="#" className="text-sm font-medium text-[#729ffa] inline-flex items-center transition-all duration-300 hover:text-[#5a87e6]">
