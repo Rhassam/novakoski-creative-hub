@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from "react";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -69,35 +68,40 @@ const Header = ({ activeSection, scrollToSection }: HeaderProps) => {
             />
           </div>
           
-          <div className="overflow-hidden transition-all duration-500">
+          <div className="ml-3 overflow-hidden transition-all duration-500">
             <div className={cn(
               "font-bold relative transition-all duration-500 whitespace-nowrap flex items-center",
               "text-[#1C1C1C] font-['Montserrat_Alternates',sans-serif]",
               nameCompressed ? "text-xl" : "text-2xl"
             )}>
-              <div className={cn(
-                "flex overflow-hidden transition-all duration-500",
-                nameCompressed ? "w-[1ch]" : "w-[4ch]"
-              )}>
-                <span className="text-[#729ffa] min-w-[1ch] flex-shrink-0">S</span>
+              {/* First name animation */}
+              <div className="relative flex items-center overflow-visible">
+                {/* "S" stays visible */}
+                <span className="text-[#729ffa] flex-shrink-0 relative z-10">S</span>
+                
+                {/* "am" retracts/expands */}
                 <span className={cn(
-                  "transition-all duration-500 origin-left",
-                  nameCompressed ? "max-w-0 opacity-0 scale-x-0" : "max-w-[3ch] opacity-100 scale-x-100"
+                  "overflow-hidden transition-all duration-500 origin-left relative",
+                  nameCompressed ? "w-0" : "w-[2ch]"
                 )}>
-                  am
+                  <span className="absolute left-0 whitespace-nowrap">am</span>
                 </span>
               </div>
-              <div className="mx-1"></div> {/* Espaço entre os nomes */}
-              <div className={cn(
-                "flex overflow-hidden transition-all duration-500",
-                nameCompressed ? "w-[1ch]" : "w-[9ch]"
-              )}>
-                <span className="text-[#729ffa] min-w-[1ch] flex-shrink-0">N</span>
+              
+              {/* Space between names */}
+              <div className="mx-2"></div>
+              
+              {/* Last name animation */}
+              <div className="relative flex items-center overflow-visible">
+                {/* "N" stays visible */}
+                <span className="text-[#729ffa] flex-shrink-0 relative z-10">N</span>
+                
+                {/* "ovakoski" retracts/expands */}
                 <span className={cn(
-                  "transition-all duration-500 origin-left",
-                  nameCompressed ? "max-w-0 opacity-0 scale-x-0" : "max-w-[8ch] opacity-100 scale-x-100"
+                  "overflow-hidden transition-all duration-500 origin-left relative",
+                  nameCompressed ? "w-0" : "w-[8ch]"
                 )}>
-                  ovakoski
+                  <span className="absolute left-0 whitespace-nowrap">ovakoski</span>
                 </span>
               </div>
             </div>
