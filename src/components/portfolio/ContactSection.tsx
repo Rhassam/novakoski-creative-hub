@@ -1,3 +1,4 @@
+
 import { Mail, Phone, MapPin, X, CheckCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import ContactItem from "./ContactItem";
@@ -72,7 +73,7 @@ const ContactSection = ({ isVisible }: ContactSectionProps) => {
       )}
     >
       {/* Estilos para animações */}
-      <style jsx>{animateFadeIn}</style>
+      <style>{animateFadeIn}</style>
       
       <div className="absolute inset-0 bg-white shadow-lg rounded-lg z-0"></div>
       <div className="container mx-auto px-6 relative z-10">
