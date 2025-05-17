@@ -48,7 +48,7 @@ const HeroSection = ({ scrollToSection }: HeroSectionProps) => {
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-[#729ffa] text-left">
             Criando histórias visuais que impressionam
           </h1>
-          <p className="text-lg md:text-xl mb-8 max-w-2xl text-[#729ffa] text-left">
+          <p className="text-lg md:text-xl mb-8 max-w-2xl text-[#002766] text-left">
             Fotógrafo, Editor de Vídeo e Motion Designer focado em transformar conceitos criativos em experiências visuais memoráveis.
           </p>
           <div className="flex justify-start">
