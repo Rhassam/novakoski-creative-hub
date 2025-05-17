@@ -58,7 +58,7 @@ const Header = ({ activeSection, scrollToSection }: HeaderProps) => {
           {/* Logo placeholder - user can replace with actual logo */}
           <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 transition-transform duration-300 hover:scale-105">
             <img 
-              src="/logo-placeholder.png" 
+              src="Logo-Sam-Novakoski_gfgqvr" 
               alt="Sam Novakoski Logo" 
               className="w-full h-full object-cover"
               onError={(e) => {
