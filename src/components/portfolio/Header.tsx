@@ -70,39 +70,36 @@ const Header = ({ activeSection, scrollToSection }: HeaderProps) => {
           
           <div className="ml-3 overflow-hidden transition-all duration-500">
             <div className={cn(
-              "font-bold relative transition-all duration-500 whitespace-nowrap flex items-center",
-              "text-[#1C1C1C] font-['Montserrat_Alternates',sans-serif]",
+              "font-bold relative transition-all duration-500 whitespace-nowrap",
+              "font-['Montserrat_Alternates',sans-serif]",
               nameCompressed ? "text-xl" : "text-2xl"
             )}>
-              {/* First name animation */}
-              <div className="relative flex items-center overflow-visible">
-                {/* "S" stays visible */}
-                <span className="text-[#729ffa] flex-shrink-0 relative z-10">S</span>
-                
-                {/* "am" retracts/expands */}
-                <span className={cn(
-                  "overflow-hidden transition-all duration-500 origin-left relative",
-                  nameCompressed ? "w-0" : "w-[2ch]"
+              {/* Combined name animation with proper contraction */}
+              <div className="flex items-center overflow-hidden">
+                <div className={cn(
+                  "flex transition-all duration-500",
+                  nameCompressed ? "mr-0" : "mr-2" // Espaço entre nomes quando expandido
                 )}>
-                  <span className="absolute left-0 whitespace-nowrap">am</span>
-                </span>
-              </div>
-              
-              {/* Space between names */}
-              <div className="mx-2"></div>
-              
-              {/* Last name animation */}
-              <div className="relative flex items-center overflow-visible">
-                {/* "N" stays visible */}
-                <span className="text-[#729ffa] flex-shrink-0 relative z-10">N</span>
+                  {/* Sam in black */}
+                  <span className="text-[#1C1C1C] flex-shrink-0">S</span>
+                  <span className={cn(
+                    "text-[#1C1C1C] overflow-hidden transition-all duration-500 origin-left",
+                    nameCompressed ? "w-0" : "w-[2ch]"
+                  )}>
+                    <span className="inline-block">am</span>
+                  </span>
+                </div>
                 
-                {/* "ovakoski" retracts/expands */}
-                <span className={cn(
-                  "overflow-hidden transition-all duration-500 origin-left relative",
-                  nameCompressed ? "w-0" : "w-[8ch]"
-                )}>
-                  <span className="absolute left-0 whitespace-nowrap">ovakoski</span>
-                </span>
+                <div className="flex">
+                  {/* Novakoski in blue */}
+                  <span className="text-[#729ffa] flex-shrink-0">N</span>
+                  <span className={cn(
+                    "text-[#729ffa] overflow-hidden transition-all duration-500 origin-left",
+                    nameCompressed ? "w-0" : "w-[8ch]"
+                  )}>
+                    <span className="inline-block">ovakoski</span>
+                  </span>
+                </div>
               </div>
             </div>
           </div>
