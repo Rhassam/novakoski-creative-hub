@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ChevronRight, X, Play } from "lucide-react";
+import { ChevronRight, X, Play, ChevronLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Dialog, DialogContent, DialogClose } from "@/components/ui/dialog";
 
@@ -12,6 +12,7 @@ type ProjectType = {
   description: string;
   imageUrl: string;
   videoUrl?: string; // URL para vídeos do YouTube
+  additionalImages?: string[]; // Para permitir múltiplas imagens em um projeto
 };
 
 type PortfolioSectionProps = {
@@ -23,7 +24,7 @@ type PortfolioSectionProps = {
 };
 
 const PortfolioSection = ({ id, title, description, projects, isVisible }: PortfolioSectionProps) => {
-  const [selectedMedia, setSelectedMedia] = useState<{ type: "image" | "video"; url: string } | null>(null);
+  const [selectedMedia, setSelectedMedia] = useState<{ type: "image" | "video"; url: string; projectIndex: number; mediaIndex: number } | null>(null);
 
   // Função para extrair o ID do vídeo do YouTube de uma URL
   const getYoutubeVideoId = (url: string): string | null => {
@@ -33,15 +34,54 @@ const PortfolioSection = ({ id, title, description, projects, isVisible }: Portf
   };
 
   // Função para lidar com cliques em mídia
-  const handleMediaClick = (project: ProjectType) => {
+  const handleMediaClick = (project: ProjectType, projectIndex: number) => {
     // Se o projeto tem um vídeo, abre o modal de vídeo
     if (project.videoUrl) {
-      setSelectedMedia({ type: "video", url: project.videoUrl });
+      setSelectedMedia({ type: "video", url: project.videoUrl, projectIndex, mediaIndex: 0 });
     } 
     // Caso contrário, abre o modal de imagem
     else {
-      setSelectedMedia({ type: "image", url: project.imageUrl });
+      setSelectedMedia({ type: "image", url: project.imageUrl, projectIndex, mediaIndex: 0 });
     }
+  };
+
+  // Função para navegar para a próxima mídia
+  const navigateMedia = (direction: 'next' | 'prev') => {
+    if (!selectedMedia) return;
+    
+    const currentProject = projects[selectedMedia.projectIndex];
+    const mediaList = currentProject.additionalImages || [];
+    
+    // Adiciona a imagem principal ao início da lista se for uma imagem
+    const allMedia = [
+      currentProject.imageUrl,
+      ...(mediaList || [])
+    ];
+    
+    // Adiciona o vídeo ao início da lista se for um vídeo
+    if (currentProject.videoUrl) {
+      allMedia.unshift(currentProject.videoUrl);
+    }
+    
+    let newIndex = selectedMedia.mediaIndex;
+    
+    if (direction === 'next') {
+      newIndex = (newIndex + 1) % allMedia.length;
+    } else {
+      newIndex = (newIndex - 1 + allMedia.length) % allMedia.length;
+    }
+    
+    const newUrl = allMedia[newIndex];
+    
+    // Determina o tipo de mídia
+    const isVideo = newIndex === 0 && currentProject.videoUrl;
+    
+    setSelectedMedia({
+      type: isVideo ? "video" : "image",
+      url: newUrl,
+      projectIndex: selectedMedia.projectIndex,
+      mediaIndex: newIndex
+    });
   };
 
   return (
@@ -72,7 +112,7 @@ const PortfolioSection = ({ id, title, description, projects, isVisible }: Portf
             >
               <div 
                 className="h-[55%] relative overflow-hidden cursor-pointer"
-                onClick={() => handleMediaClick(project)}
+                onClick={() => handleMediaClick(project, index)}
               >
                 <div className="absolute inset-0 bg-[#729ffa]/0 hover:bg-[#729ffa]/20 transition-all duration-400 z-10 flex items-center justify-center">
                   {project.videoUrl && (
@@ -115,9 +155,30 @@ const PortfolioSection = ({ id, title, description, projects, isVisible }: Portf
       <Dialog open={!!selectedMedia} onOpenChange={() => setSelectedMedia(null)}>
         <DialogContent className="max-w-4xl bg-transparent border-none p-0 shadow-none overflow-hidden">
           <div className="relative w-full">
-            <DialogClose className="absolute right-2 top-2 z-50 bg-white/80 rounded-full p-1 hover:bg-white">
-              <X className="h-6 w-6 text-gray-700" />
+            <DialogClose className="absolute right-2 top-2 z-50 bg-white/80 hover:bg-white rounded-full p-2 transition-all duration-300 hover:shadow-md">
+              <X className="h-6 w-6 text-[#1C1C1C] hover:text-[#729ffa]" />
             </DialogClose>
+            
+            {/* Navigation buttons */}
+            <div className="absolute inset-y-0 left-2 flex items-center z-40">
+              <button 
+                onClick={() => navigateMedia('prev')} 
+                className="bg-white/80 hover:bg-white rounded-full p-2 transition-all duration-300 hover:shadow-md"
+                aria-label="Previous"
+              >
+                <ChevronLeft className="h-6 w-6 text-[#1C1C1C] hover:text-[#729ffa]" />
+              </button>
+            </div>
+            
+            <div className="absolute inset-y-0 right-2 flex items-center z-40">
+              <button 
+                onClick={() => navigateMedia('next')} 
+                className="bg-white/80 hover:bg-white rounded-full p-2 transition-all duration-300 hover:shadow-md"
+                aria-label="Next"
+              >
+                <ChevronRight className="h-6 w-6 text-[#1C1C1C] hover:text-[#729ffa]" />
+              </button>
+            </div>
             
             {selectedMedia?.type === "image" && (
               <img 

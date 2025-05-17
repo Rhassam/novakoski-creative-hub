@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { ChevronLeft, X } from "lucide-react";
+import { ChevronLeft, X, ChevronRight } from "lucide-react";
 import { Dialog, DialogContent, DialogClose } from "@/components/ui/dialog";
 
 type Project = {
@@ -24,7 +24,11 @@ const ProjectDetail = () => {
   const { categoryId, projectId } = useParams<{ categoryId: string; projectId: string }>();
   const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
-  const [selectedMedia, setSelectedMedia] = useState<{ type: "image" | "video"; url: string } | null>(null);
+  const [selectedMedia, setSelectedMedia] = useState<{ 
+    type: "image" | "video"; 
+    url: string;
+    index: number;
+  } | null>(null);
 
   // Função para extrair o ID do vídeo do YouTube de uma URL
   const getYoutubeVideoId = (url?: string): string | null => {
@@ -168,8 +172,45 @@ const ProjectDetail = () => {
   }, [categoryId, projectId]);
 
   // Função para abrir o modal com a mídia selecionada
-  const handleMediaClick = (type: "image" | "video", url: string) => {
-    setSelectedMedia({ type, url });
+  const handleMediaClick = (type: "image" | "video", url: string, index: number) => {
+    setSelectedMedia({ type, url, index });
+  };
+
+  // Função para navegar entre as mídias no modal
+  const navigateMedia = (direction: 'next' | 'prev') => {
+    if (!selectedMedia || !project) return;
+    
+    // Cria uma lista com todas as mídias do projeto
+    const allMedia: Array<{type: "image" | "video", url: string}> = [];
+    
+    // Adiciona o vídeo principal se existir
+    if (project.videoUrl) {
+      allMedia.push({ type: "video", url: project.videoUrl });
+    }
+    
+    // Adiciona a imagem principal
+    allMedia.push({ type: "image", url: project.imageUrl });
+    
+    // Adiciona imagens adicionais
+    if (project.additionalImages) {
+      project.additionalImages.forEach(img => {
+        allMedia.push({ type: "image", url: img });
+      });
+    }
+    
+    let newIndex = selectedMedia.index;
+    
+    if (direction === 'next') {
+      newIndex = (newIndex + 1) % allMedia.length;
+    } else {
+      newIndex = (newIndex - 1 + allMedia.length) % allMedia.length;
+    }
+    
+    setSelectedMedia({
+      type: allMedia[newIndex].type,
+      url: allMedia[newIndex].url,
+      index: newIndex
+    });
   };
 
   if (loading) {
@@ -189,9 +230,7 @@ const ProjectDetail = () => {
     <div className="min-h-screen font-['Montserrat',sans-serif] text-[#1C1C1C]">
       {/* Background with reduced opacity */}
       <div className="fixed inset-0 w-full h-full z-[-1]">
-        <div 
-          className="absolute inset-0 bg-white opacity-95"
-        />
+        <div className="absolute inset-0 bg-white opacity-95" />
       </div>
       
       <div className="container mx-auto px-6 py-16">
@@ -231,7 +270,7 @@ const ProjectDetail = () => {
                 <div className="mt-8 mb-8">
                   <h2 className="text-2xl font-bold mb-6 text-center font-['Montserrat_Alternates',sans-serif]">Vídeo</h2>
                   <div className="aspect-video w-full max-w-2xl mx-auto shadow-lg rounded-lg overflow-hidden cursor-pointer hover:shadow-xl transition-all duration-300"
-                       onClick={() => handleMediaClick("video", project.videoUrl!)}>
+                       onClick={() => handleMediaClick("video", project.videoUrl!, 0)}>
                     <div className="relative w-full h-full">
                       <img 
                         src={`https://img.youtube.com/vi/${getYoutubeVideoId(project.videoUrl)}/maxresdefault.jpg`} 
@@ -259,7 +298,7 @@ const ProjectDetail = () => {
                       <div 
                         key={index} 
                         className="rounded-lg overflow-hidden h-[200px] shadow-md cursor-pointer transition-transform duration-300 hover:shadow-xl hover:scale-[1.02]"
-                        onClick={() => handleMediaClick("image", img)}
+                        onClick={() => handleMediaClick("image", img, project.videoUrl ? index + 2 : index + 1)}
                       >
                         <img 
                           src={img} 
@@ -280,9 +319,30 @@ const ProjectDetail = () => {
       <Dialog open={!!selectedMedia} onOpenChange={() => setSelectedMedia(null)}>
         <DialogContent className="max-w-4xl bg-transparent border-none p-0 shadow-none">
           <div className="relative w-full">
-            <DialogClose className="absolute right-2 top-2 z-50 bg-white/80 rounded-full p-1 hover:bg-white">
-              <X className="h-6 w-6 text-gray-700" />
+            <DialogClose className="absolute right-2 top-2 z-50 bg-white/80 rounded-full p-2 hover:bg-white transition-all duration-300 hover:shadow-md">
+              <X className="h-6 w-6 text-[#1C1C1C] hover:text-[#729ffa]" />
             </DialogClose>
+            
+            {/* Navigation arrows */}
+            <div className="absolute inset-y-0 left-2 flex items-center z-40">
+              <button 
+                onClick={() => navigateMedia('prev')} 
+                className="bg-white/80 hover:bg-white rounded-full p-2 transition-all duration-300 hover:shadow-md"
+                aria-label="Previous image"
+              >
+                <ChevronLeft className="h-6 w-6 text-[#1C1C1C] hover:text-[#729ffa]" />
+              </button>
+            </div>
+            
+            <div className="absolute inset-y-0 right-2 flex items-center z-40">
+              <button 
+                onClick={() => navigateMedia('next')} 
+                className="bg-white/80 hover:bg-white rounded-full p-2 transition-all duration-300 hover:shadow-md"
+                aria-label="Next image"
+              >
+                <ChevronRight className="h-6 w-6 text-[#1C1C1C] hover:text-[#729ffa]" />
+              </button>
+            </div>
             
             {selectedMedia?.type === "image" && (
               <img 

@@ -9,22 +9,43 @@ export const scrollToSectionCentered = (sectionId: string): void => {
   
   if (!section) return;
   
-  // Calcula a posição para centralizar o elemento na viewport
+  // Calculamos a posição para centralizar o elemento na viewport
   const viewportHeight = window.innerHeight;
   const elementHeight = section.offsetHeight;
-  const offsetTop = section.offsetTop;
+  const elementRect = section.getBoundingClientRect();
+  const scrollY = window.scrollY;
+  const elementTop = scrollY + elementRect.top;
   
   // Se o elemento for maior que a viewport, rola para o topo do elemento
   // Caso contrário, centraliza o elemento na viewport
   const scrollPosition = elementHeight >= viewportHeight
-    ? offsetTop
-    : offsetTop - ((viewportHeight - elementHeight) / 2);
+    ? elementTop
+    : elementTop - ((viewportHeight - elementHeight) / 2);
   
-  // Rola para a posição calculada
-  window.scrollTo({
-    top: scrollPosition,
-    behavior: 'smooth'
-  });
+  // Utiliza requestAnimationFrame para uma animação mais suave
+  const startPosition = window.scrollY;
+  const change = scrollPosition - startPosition;
+  const duration = 600; // ms
+  let startTime: number | null = null;
+  
+  function animateScroll(timestamp: number) {
+    if (!startTime) startTime = timestamp;
+    const elapsed = timestamp - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    
+    // Função de easing para suavizar o movimento
+    const easeInOutCubic = progress < 0.5
+      ? 4 * progress * progress * progress
+      : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+    
+    window.scrollTo(0, startPosition + change * easeInOutCubic);
+    
+    if (progress < 1) {
+      window.requestAnimationFrame(animateScroll);
+    }
+  }
+  
+  window.requestAnimationFrame(animateScroll);
 };
 
 /**
@@ -36,8 +57,33 @@ export const isElementInViewport = (element: HTMLElement): boolean => {
   const rect = element.getBoundingClientRect();
   const windowHeight = window.innerHeight || document.documentElement.clientHeight;
   
-  return (
-    rect.top <= windowHeight / 2 &&
-    rect.bottom >= windowHeight / 2
-  );
+  // Consideramos que um elemento está na viewport se seu centro está na parte visível da tela
+  const elementCenter = rect.top + rect.height / 2;
+  return elementCenter >= 0 && elementCenter <= windowHeight;
+};
+
+/**
+ * Usa Intersection Observer para detectar elementos visíveis - mais eficiente que onScroll
+ * @param elementId - ID do elemento a observar
+ * @param callback - Função callback quando elemento se torna visível
+ * @param options - Opções do Intersection Observer
+ */
+export const createVisibilityObserver = (
+  elementId: string,
+  callback: (isVisible: boolean) => void,
+  options = { threshold: 0.2 }
+) => {
+  const element = document.getElementById(elementId);
+  if (!element) return;
+  
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      callback(entry.isIntersecting);
+    });
+  }, options);
+  
+  observer.observe(element);
+  
+  // Retorna função para limpar o observer
+  return () => observer.disconnect();
 };

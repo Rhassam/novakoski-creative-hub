@@ -13,12 +13,14 @@ type HeaderProps = {
 const Header = ({ activeSection, scrollToSection }: HeaderProps) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [nameCompressed, setNameCompressed] = useState(false);
   const navRef = useRef<HTMLDivElement>(null);
   
   // Handle scroll effects for header
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
+      setNameCompressed(window.scrollY > 150);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -42,7 +44,6 @@ const Header = ({ activeSection, scrollToSection }: HeaderProps) => {
   
   // Handle navigation item click to close menu
   const handleNavClick = (sectionId: string) => {
-    // Usa a função de scroll centralizado em vez do scrollToSection padrão
     scrollToSectionCentered(sectionId);
     setMobileMenuOpen(false);
   };
@@ -54,14 +55,46 @@ const Header = ({ activeSection, scrollToSection }: HeaderProps) => {
       isScrolled ? "py-4 shadow-md shadow-[#729ffa]/15" : ""
     )}>
       <div className="container mx-auto px-6 flex justify-between items-center">
-        <div className="text-2xl font-bold relative transition-transform duration-300 hover:scale-105 text-[#1C1C1C] font-['Montserrat_Alternates',sans-serif]">
-          Sam<span className="text-[#729ffa]">Novakoski</span>
+        <div className="flex items-center gap-3 transition-all duration-300">
+          {/* Logo placeholder - user can replace with actual logo */}
+          <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 transition-transform duration-300 hover:scale-105">
+            <img 
+              src="/logo-placeholder.png" 
+              alt="Sam Novakoski Logo" 
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                // Fallback if image doesn't exist
+                (e.target as HTMLImageElement).style.display = 'none';
+              }}
+            />
+          </div>
+          
+          <div className="overflow-hidden transition-all duration-500">
+            <div className={cn(
+              "font-bold relative transition-all duration-500",
+              "text-[#1C1C1C] font-['Montserrat_Alternates',sans-serif]",
+              nameCompressed ? "text-xl" : "text-2xl"
+            )}>
+              <span className={cn(
+                "transition-all duration-500",
+                nameCompressed ? "opacity-0 absolute" : "opacity-100"
+              )}>
+                Sam
+              </span>
+              <span className={cn(
+                "text-[#729ffa] transition-all duration-500",
+                nameCompressed ? "ml-0" : "ml-1"
+              )}>
+                {nameCompressed ? "SN" : "Novakoski"}
+              </span>
+            </div>
+          </div>
         </div>
         
         {/* Mobile Menu Button */}
         <div 
           data-menu-toggle
-          className="md:hidden text-[#1C1C1C] text-2xl cursor-pointer transition-transform duration-300 hover:scale-110"
+          className="md:hidden text-[#1C1C1C] text-2xl cursor-pointer transition-all duration-300 hover:scale-110 hover:text-[#729ffa]"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
           {mobileMenuOpen ? <X /> : <Menu />}
@@ -78,7 +111,7 @@ const Header = ({ activeSection, scrollToSection }: HeaderProps) => {
         >
           {/* Close button for mobile menu (visible only on mobile) */}
           <button
-            className="absolute top-6 right-6 text-[#1C1C1C] md:hidden"
+            className="absolute top-6 right-6 text-[#1C1C1C] md:hidden hover:text-[#729ffa] transition-colors duration-300"
             onClick={() => setMobileMenuOpen(false)}
             aria-label="Close menu"
           >
