@@ -135,7 +135,7 @@ const ProjectDetail = () => {
               "https://images.unsplash.com/photo-1626785774573-4b799315345d",
               "https://images.unsplash.com/photo-1626785774625-ddcddc3445e9"
             ],
-            videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"  // Exemplo de video
+            videoUrl: "https://www.youtube.com/watch?v=0P9GNJ26bV8"  // Exemplo de video
           }
         ]
       },
