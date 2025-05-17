@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import backgroundImage from "/lovable-uploads/9f4fe2ac-86a3-44bf-ab5c-466be35b79be.png";
 
@@ -9,6 +8,8 @@ import PortfolioSection from "@/components/portfolio/PortfolioSection";
 import AboutSection from "@/components/portfolio/AboutSection";
 import ContactSection from "@/components/portfolio/ContactSection";
 import Footer from "@/components/portfolio/Footer";
+
+import { scrollToSectionCentered } from "@/lib/scrollHelper";
 
 const Index = () => {
   const [activeSection, setActiveSection] = useState("home");
@@ -49,10 +50,7 @@ const Index = () => {
 
   // Smooth scroll to section
   const scrollToSection = (sectionId: string) => {
-    const section = document.getElementById(sectionId);
-    if (section) {
-      section.scrollIntoView({ behavior: "smooth" });
-    }
+    scrollToSectionCentered(sectionId);
   };
 
   return (

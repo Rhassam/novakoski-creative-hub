@@ -1,8 +1,8 @@
 
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { ChevronLeft } from "lucide-react";
-import backgroundImage from "/lovable-uploads/9f4fe2ac-86a3-44bf-ab5c-466be35b79be.png";
+import { ChevronLeft, X } from "lucide-react";
+import { Dialog, DialogContent, DialogClose } from "@/components/ui/dialog";
 
 type Project = {
   id: string;
@@ -12,6 +12,7 @@ type Project = {
   fullDescription?: string;
   imageUrl: string;
   additionalImages?: string[];
+  videoUrl?: string; // URL para vídeos do YouTube
 };
 
 type ProjectCategory = {
@@ -23,10 +24,20 @@ const ProjectDetail = () => {
   const { categoryId, projectId } = useParams<{ categoryId: string; projectId: string }>();
   const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
+  const [selectedMedia, setSelectedMedia] = useState<{ type: "image" | "video"; url: string } | null>(null);
 
-  // In a real app, you'd fetch this data from an API
+  // Função para extrair o ID do vídeo do YouTube de uma URL
+  const getYoutubeVideoId = (url?: string): string | null => {
+    if (!url) return null;
+    
+    const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[7].length === 11) ? match[7] : null;
+  };
+
+  // Em um app real, você buscaria esses dados de uma API
   useEffect(() => {
-    // For demo purposes, we'll create some fake data
+    // Para fins de demonstração, criamos alguns dados falsos
     const projectData: Record<string, ProjectCategory> = {
       "photography": {
         id: "photography",
@@ -86,7 +97,8 @@ const ProjectDetail = () => {
               "https://images.unsplash.com/photo-1516035069371-29a1b244cc32",
               "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789",
               "https://images.unsplash.com/photo-1535016120720-40c646be5580"
-            ]
+            ],
+            videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"  // Exemplo de video
           },
           {
             id: "documentario-local",
@@ -99,7 +111,8 @@ const ProjectDetail = () => {
               "https://images.unsplash.com/photo-1576073445047-d79e26f4f3d7",
               "https://images.unsplash.com/photo-1589903308904-1010c2294adc",
               "https://images.unsplash.com/photo-1598899246709-c8273815f3ef"
-            ]
+            ],
+            videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"  // Exemplo de video
           }
         ]
       },
@@ -117,7 +130,8 @@ const ProjectDetail = () => {
               "https://images.unsplash.com/photo-1626908013351-800ddd7b96c6",
               "https://images.unsplash.com/photo-1626785774573-4b799315345d",
               "https://images.unsplash.com/photo-1626785774625-ddcddc3445e9"
-            ]
+            ],
+            videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"  // Exemplo de video
           }
         ]
       },
@@ -135,7 +149,8 @@ const ProjectDetail = () => {
               "https://images.unsplash.com/photo-1542744173-8e7e53415bb0",
               "https://images.unsplash.com/photo-1551288049-bebda4e38f71",
               "https://images.unsplash.com/photo-1579389083046-e3df9c2b3325"
-            ]
+            ],
+            videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"  // Exemplo de video
           }
         ]
       }
@@ -151,6 +166,11 @@ const ProjectDetail = () => {
     
     setLoading(false);
   }, [categoryId, projectId]);
+
+  // Função para abrir o modal com a mídia selecionada
+  const handleMediaClick = (type: "image" | "video", url: string) => {
+    setSelectedMedia({ type, url });
+  };
 
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center">Carregando...</div>;
@@ -196,7 +216,7 @@ const ProjectDetail = () => {
                   <div className="text-sm uppercase tracking-wider font-medium mb-2">
                     {project.category}
                   </div>
-                  <h1 className="text-4xl font-bold mb-2">{project.title}</h1>
+                  <h1 className="text-4xl font-bold mb-2 font-['Montserrat_Alternates',sans-serif]">{project.title}</h1>
                 </div>
               </div>
             </div>
@@ -206,12 +226,41 @@ const ProjectDetail = () => {
                 {project.fullDescription || project.description}
               </p>
               
+              {/* Exibir vídeo se disponível */}
+              {project.videoUrl && getYoutubeVideoId(project.videoUrl) && (
+                <div className="mt-8 mb-8">
+                  <h2 className="text-2xl font-bold mb-6 text-center font-['Montserrat_Alternates',sans-serif]">Vídeo</h2>
+                  <div className="aspect-video w-full max-w-2xl mx-auto shadow-lg rounded-lg overflow-hidden cursor-pointer hover:shadow-xl transition-all duration-300"
+                       onClick={() => handleMediaClick("video", project.videoUrl!)}>
+                    <div className="relative w-full h-full">
+                      <img 
+                        src={`https://img.youtube.com/vi/${getYoutubeVideoId(project.videoUrl)}/maxresdefault.jpg`} 
+                        alt="Video thumbnail" 
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/30 transition-all duration-300 hover:bg-black/40">
+                        <div className="bg-white/90 rounded-full p-4 shadow-lg">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#729ffa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+              
+              {/* Galeria de imagens */}
               {project.additionalImages && project.additionalImages.length > 0 && (
                 <div className="mt-8">
-                  <h2 className="text-2xl font-bold mb-6 text-center">Galeria</h2>
+                  <h2 className="text-2xl font-bold mb-6 text-center font-['Montserrat_Alternates',sans-serif]">Galeria</h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {project.additionalImages.map((img, index) => (
-                      <div key={index} className="rounded-lg overflow-hidden h-[200px] shadow-md">
+                      <div 
+                        key={index} 
+                        className="rounded-lg overflow-hidden h-[200px] shadow-md cursor-pointer transition-transform duration-300 hover:shadow-xl hover:scale-[1.02]"
+                        onClick={() => handleMediaClick("image", img)}
+                      >
                         <img 
                           src={img} 
                           alt={`${project.title} - Imagem ${index + 1}`} 
@@ -226,6 +275,38 @@ const ProjectDetail = () => {
           </div>
         </div>
       </div>
+
+      {/* Modal para visualização de mídia */}
+      <Dialog open={!!selectedMedia} onOpenChange={() => setSelectedMedia(null)}>
+        <DialogContent className="max-w-4xl bg-transparent border-none p-0 shadow-none">
+          <div className="relative w-full">
+            <DialogClose className="absolute right-2 top-2 z-50 bg-white/80 rounded-full p-1 hover:bg-white">
+              <X className="h-6 w-6 text-gray-700" />
+            </DialogClose>
+            
+            {selectedMedia?.type === "image" && (
+              <img 
+                src={selectedMedia.url} 
+                alt="Imagem em destaque" 
+                className="w-full max-h-[80vh] object-contain rounded-lg"
+              />
+            )}
+            
+            {selectedMedia?.type === "video" && getYoutubeVideoId(selectedMedia.url) && (
+              <div className="aspect-video w-full">
+                <iframe
+                  className="w-full h-full rounded-lg"
+                  src={`https://www.youtube.com/embed/${getYoutubeVideoId(selectedMedia.url)}?autoplay=1`}
+                  title="YouTube video player"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                ></iframe>
+              </div>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

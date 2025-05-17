@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import NavItem from "./NavItem";
+import { scrollToSectionCentered } from "@/lib/scrollHelper";
 
 type HeaderProps = {
   activeSection: string;
@@ -41,7 +42,8 @@ const Header = ({ activeSection, scrollToSection }: HeaderProps) => {
   
   // Handle navigation item click to close menu
   const handleNavClick = (sectionId: string) => {
-    scrollToSection(sectionId);
+    // Usa a função de scroll centralizado em vez do scrollToSection padrão
+    scrollToSectionCentered(sectionId);
     setMobileMenuOpen(false);
   };
 

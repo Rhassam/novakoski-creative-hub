@@ -1,7 +1,9 @@
 
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, X, Play } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Dialog, DialogContent, DialogClose } from "@/components/ui/dialog";
 
 type ProjectType = {
   id: string;
@@ -9,6 +11,7 @@ type ProjectType = {
   category: string;
   description: string;
   imageUrl: string;
+  videoUrl?: string; // URL para vídeos do YouTube
 };
 
 type PortfolioSectionProps = {
@@ -20,6 +23,27 @@ type PortfolioSectionProps = {
 };
 
 const PortfolioSection = ({ id, title, description, projects, isVisible }: PortfolioSectionProps) => {
+  const [selectedMedia, setSelectedMedia] = useState<{ type: "image" | "video"; url: string } | null>(null);
+
+  // Função para extrair o ID do vídeo do YouTube de uma URL
+  const getYoutubeVideoId = (url: string): string | null => {
+    const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[7].length === 11) ? match[7] : null;
+  };
+
+  // Função para lidar com cliques em mídia
+  const handleMediaClick = (project: ProjectType) => {
+    // Se o projeto tem um vídeo, abre o modal de vídeo
+    if (project.videoUrl) {
+      setSelectedMedia({ type: "video", url: project.videoUrl });
+    } 
+    // Caso contrário, abre o modal de imagem
+    else {
+      setSelectedMedia({ type: "image", url: project.imageUrl });
+    }
+  };
+
   return (
     <section 
       id={id} 
@@ -31,7 +55,7 @@ const PortfolioSection = ({ id, title, description, projects, isVisible }: Portf
       <div className="absolute inset-0 bg-[#fffcff]/80 backdrop-blur-sm rounded-lg z-0"></div>
       <div className="container mx-auto px-6 relative z-10">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold inline-block relative mb-4 text-[#729ffa]">
+          <h2 className="text-4xl font-bold inline-block relative mb-4 text-[#729ffa] font-['Montserrat_Alternates',sans-serif]">
             {title}
             <span className="absolute bottom-[-10px] left-1/2 transform -translate-x-1/2 w-[60px] h-[3px] bg-[#729ffa]"></span>
           </h2>
@@ -46,8 +70,17 @@ const PortfolioSection = ({ id, title, description, projects, isVisible }: Portf
               key={index} 
               className="w-full max-w-sm h-[400px] rounded-lg overflow-hidden shadow-lg shadow-[#729ffa]/10 border border-[#efefef] bg-[#fffcff] transition-all duration-500 hover:transform hover:-translate-y-2 hover:shadow-xl hover:shadow-[#729ffa]/20"
             >
-              <div className="h-[55%] relative overflow-hidden">
-                <div className="absolute inset-0 bg-[#729ffa]/0 hover:bg-[#729ffa]/20 transition-all duration-400 z-10"></div>
+              <div 
+                className="h-[55%] relative overflow-hidden cursor-pointer"
+                onClick={() => handleMediaClick(project)}
+              >
+                <div className="absolute inset-0 bg-[#729ffa]/0 hover:bg-[#729ffa]/20 transition-all duration-400 z-10 flex items-center justify-center">
+                  {project.videoUrl && (
+                    <div className="opacity-0 hover:opacity-100 transition-opacity duration-300 bg-black/30 rounded-full p-2">
+                      <Play className="w-8 h-8 text-white" />
+                    </div>
+                  )}
+                </div>
                 <img 
                   src={project.imageUrl} 
                   alt={project.title} 
@@ -77,6 +110,38 @@ const PortfolioSection = ({ id, title, description, projects, isVisible }: Portf
           ))}
         </div>
       </div>
+
+      {/* Modal para visualização de mídia */}
+      <Dialog open={!!selectedMedia} onOpenChange={() => setSelectedMedia(null)}>
+        <DialogContent className="max-w-4xl bg-transparent border-none p-0 shadow-none overflow-hidden">
+          <div className="relative w-full">
+            <DialogClose className="absolute right-2 top-2 z-50 bg-white/80 rounded-full p-1 hover:bg-white">
+              <X className="h-6 w-6 text-gray-700" />
+            </DialogClose>
+            
+            {selectedMedia?.type === "image" && (
+              <img 
+                src={selectedMedia.url} 
+                alt="Imagem em destaque" 
+                className="w-full max-h-[80vh] object-contain rounded-lg"
+              />
+            )}
+            
+            {selectedMedia?.type === "video" && getYoutubeVideoId(selectedMedia.url) && (
+              <div className="aspect-video w-full">
+                <iframe
+                  className="w-full h-full rounded-lg"
+                  src={`https://www.youtube.com/embed/${getYoutubeVideoId(selectedMedia.url)}?autoplay=1`}
+                  title="YouTube video player"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                ></iframe>
+              </div>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </section>
   );
 };
