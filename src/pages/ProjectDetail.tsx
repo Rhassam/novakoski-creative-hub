@@ -171,16 +171,17 @@ const ProjectDetail = () => {
     setLoading(false);
   }, [categoryId, projectId]);
 
-  // Função para abrir o modal com a mídia selecionada
+  // Função para abrir o modal com a mídia selecionada, evitando a imagem principal
   const handleMediaClick = (type: "image" | "video", url: string, index: number) => {
+    // Ajustamos o índice para não incluir a imagem principal no carrossel
     setSelectedMedia({ type, url, index });
   };
 
-  // Função para navegar entre as mídias no modal
+  // Função para navegar entre as mídias no modal, pulando a imagem principal
   const navigateMedia = (direction: 'next' | 'prev') => {
     if (!selectedMedia || !project) return;
     
-    // Cria uma lista com todas as mídias do projeto
+    // Cria uma lista apenas com as mídias adicionais e o vídeo, excluindo a imagem principal
     const allMedia: Array<{type: "image" | "video", url: string}> = [];
     
     // Adiciona o vídeo principal se existir
@@ -188,15 +189,15 @@ const ProjectDetail = () => {
       allMedia.push({ type: "video", url: project.videoUrl });
     }
     
-    // Adiciona a imagem principal
-    allMedia.push({ type: "image", url: project.imageUrl });
-    
     // Adiciona imagens adicionais
     if (project.additionalImages) {
       project.additionalImages.forEach(img => {
         allMedia.push({ type: "image", url: img });
       });
     }
+    
+    // Se não houver mídias adicionais, não fazemos nada
+    if (allMedia.length === 0) return;
     
     let newIndex = selectedMedia.index;
     
@@ -230,7 +231,7 @@ const ProjectDetail = () => {
     <div className="min-h-screen font-['Montserrat',sans-serif] text-[#1C1C1C]">
       {/* Background with reduced opacity */}
       <div className="fixed inset-0 w-full h-full z-[-1]">
-        <div className="absolute inset-0 bg-white opacity-95" />
+        <div className="absolute inset-0 bg-white opacity-97" />
       </div>
       
       <div className="container mx-auto px-6 py-16">
@@ -298,7 +299,7 @@ const ProjectDetail = () => {
                       <div 
                         key={index} 
                         className="rounded-lg overflow-hidden h-[200px] shadow-md cursor-pointer transition-transform duration-300 hover:shadow-xl hover:scale-[1.02]"
-                        onClick={() => handleMediaClick("image", img, project.videoUrl ? index + 2 : index + 1)}
+                        onClick={() => handleMediaClick("image", img, index + (project.videoUrl ? 1 : 0))}
                       >
                         <img 
                           src={img} 
@@ -319,28 +320,28 @@ const ProjectDetail = () => {
       <Dialog open={!!selectedMedia} onOpenChange={() => setSelectedMedia(null)}>
         <DialogContent className="max-w-4xl bg-transparent border-none p-0 shadow-none">
           <div className="relative w-full">
-            <DialogClose className="absolute right-2 top-2 z-50 bg-white/80 rounded-full p-2 hover:bg-white transition-all duration-300 hover:shadow-md">
-              <X className="h-6 w-6 text-[#1C1C1C] hover:text-[#729ffa]" />
+            <DialogClose className="absolute -right-8 -top-8 z-50 text-white/90 hover:text-[#729ffa] transition-colors duration-300">
+              <X className="h-7 w-7 drop-shadow-md hover:drop-shadow-lg" />
             </DialogClose>
             
             {/* Navigation arrows */}
-            <div className="absolute inset-y-0 left-2 flex items-center z-40">
+            <div className="absolute inset-y-0 -left-10 flex items-center z-40">
               <button 
                 onClick={() => navigateMedia('prev')} 
-                className="bg-white/80 hover:bg-white rounded-full p-2 transition-all duration-300 hover:shadow-md"
+                className="text-white/90 hover:text-[#729ffa] transition-colors duration-300"
                 aria-label="Previous image"
               >
-                <ChevronLeft className="h-6 w-6 text-[#1C1C1C] hover:text-[#729ffa]" />
+                <ChevronLeft className="h-7 w-7 drop-shadow-md hover:drop-shadow-lg" />
               </button>
             </div>
             
-            <div className="absolute inset-y-0 right-2 flex items-center z-40">
+            <div className="absolute inset-y-0 -right-10 flex items-center z-40">
               <button 
                 onClick={() => navigateMedia('next')} 
-                className="bg-white/80 hover:bg-white rounded-full p-2 transition-all duration-300 hover:shadow-md"
+                className="text-white/90 hover:text-[#729ffa] transition-colors duration-300"
                 aria-label="Next image"
               >
-                <ChevronRight className="h-6 w-6 text-[#1C1C1C] hover:text-[#729ffa]" />
+                <ChevronRight className="h-7 w-7 drop-shadow-md hover:drop-shadow-lg" />
               </button>
             </div>
             

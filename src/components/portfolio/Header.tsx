@@ -71,20 +71,19 @@ const Header = ({ activeSection, scrollToSection }: HeaderProps) => {
           
           <div className="overflow-hidden transition-all duration-500">
             <div className={cn(
-              "font-bold relative transition-all duration-500",
+              "font-bold relative transition-all duration-500 whitespace-nowrap",
               "text-[#1C1C1C] font-['Montserrat_Alternates',sans-serif]",
               nameCompressed ? "text-xl" : "text-2xl"
             )}>
               <span className={cn(
-                "transition-all duration-500",
-                nameCompressed ? "opacity-0 absolute" : "opacity-100"
+                "inline-block transition-all duration-500",
+                nameCompressed 
+                  ? "max-w-0 opacity-0 -mr-1 transform translate-x-1/2" 
+                  : "max-w-[3rem] opacity-100 mr-1"
               )}>
                 Sam
               </span>
-              <span className={cn(
-                "text-[#729ffa] transition-all duration-500",
-                nameCompressed ? "ml-0" : "ml-1"
-              )}>
+              <span className="text-[#729ffa] transition-all duration-500 inline-block">
                 {nameCompressed ? "SN" : "Novakoski"}
               </span>
             </div>

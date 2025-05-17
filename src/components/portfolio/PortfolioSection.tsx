@@ -155,28 +155,28 @@ const PortfolioSection = ({ id, title, description, projects, isVisible }: Portf
       <Dialog open={!!selectedMedia} onOpenChange={() => setSelectedMedia(null)}>
         <DialogContent className="max-w-4xl bg-transparent border-none p-0 shadow-none overflow-hidden">
           <div className="relative w-full">
-            <DialogClose className="absolute right-2 top-2 z-50 bg-white/80 hover:bg-white rounded-full p-2 transition-all duration-300 hover:shadow-md">
-              <X className="h-6 w-6 text-[#1C1C1C] hover:text-[#729ffa]" />
+            <DialogClose className="absolute -right-8 -top-8 z-50 text-white/90 hover:text-[#729ffa] transition-colors duration-300">
+              <X className="h-7 w-7 drop-shadow-md hover:drop-shadow-lg" />
             </DialogClose>
             
             {/* Navigation buttons */}
-            <div className="absolute inset-y-0 left-2 flex items-center z-40">
+            <div className="absolute inset-y-0 -left-10 flex items-center z-40">
               <button 
                 onClick={() => navigateMedia('prev')} 
-                className="bg-white/80 hover:bg-white rounded-full p-2 transition-all duration-300 hover:shadow-md"
+                className="text-white/90 hover:text-[#729ffa] transition-colors duration-300"
                 aria-label="Previous"
               >
-                <ChevronLeft className="h-6 w-6 text-[#1C1C1C] hover:text-[#729ffa]" />
+                <ChevronLeft className="h-7 w-7 drop-shadow-md hover:drop-shadow-lg" />
               </button>
             </div>
             
-            <div className="absolute inset-y-0 right-2 flex items-center z-40">
+            <div className="absolute inset-y-0 -right-10 flex items-center z-40">
               <button 
                 onClick={() => navigateMedia('next')} 
-                className="bg-white/80 hover:bg-white rounded-full p-2 transition-all duration-300 hover:shadow-md"
+                className="text-white/90 hover:text-[#729ffa] transition-colors duration-300"
                 aria-label="Next"
               >
-                <ChevronRight className="h-6 w-6 text-[#1C1C1C] hover:text-[#729ffa]" />
+                <ChevronRight className="h-7 w-7 drop-shadow-md hover:drop-shadow-lg" />
               </button>
             </div>
             

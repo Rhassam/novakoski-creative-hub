@@ -25,7 +25,7 @@ export const scrollToSectionCentered = (sectionId: string): void => {
   // Utiliza requestAnimationFrame para uma animação mais suave
   const startPosition = window.scrollY;
   const change = scrollPosition - startPosition;
-  const duration = 600; // ms
+  const duration = 500; // ms - reduzido para tornar a animação mais rápida
   let startTime: number | null = null;
   
   function animateScroll(timestamp: number) {
@@ -71,7 +71,7 @@ export const isElementInViewport = (element: HTMLElement): boolean => {
 export const createVisibilityObserver = (
   elementId: string,
   callback: (isVisible: boolean) => void,
-  options = { threshold: 0.2 }
+  options = { threshold: 0.2, rootMargin: "0px 0px -10% 0px" } // Ajustado para melhor desempenho
 ) => {
   const element = document.getElementById(elementId);
   if (!element) return;
