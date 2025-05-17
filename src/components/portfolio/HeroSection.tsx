@@ -45,10 +45,10 @@ const HeroSection = ({ scrollToSection }: HeroSectionProps) => {
 
       <div className="container mx-auto px-8 relative z-10 animate-fadeIn">
         <div className="max-w-3xl ml-0">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-[#fffcff] text-left">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-[#729ffa] text-left">
             Criando histórias visuais que impressionam
           </h1>
-          <p className="text-lg md:text-xl mb-8 max-w-2xl text-[#fffcff] text-left">
+          <p className="text-lg md:text-xl mb-8 max-w-2xl text-[#729ffa] text-left">
             Fotógrafo, Editor de Vídeo e Motion Designer focado em transformar conceitos criativos em experiências visuais memoráveis.
           </p>
           <div className="flex justify-start">
