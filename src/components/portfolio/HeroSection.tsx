@@ -35,7 +35,7 @@ const HeroSection = ({ scrollToSection }: HeroSectionProps) => {
             key={index}
             className={cn(
               "absolute inset-0 bg-cover bg-center transition-opacity duration-2000",
-              currentBgIndex === index ? "opacity-30" : "opacity-0"
+              currentBgIndex === index ? "opacity-25" : "opacity-0"
             )}
             style={{ backgroundImage: `url(${slide})` }}
           />

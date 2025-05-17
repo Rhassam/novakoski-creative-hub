@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import backgroundImage from "/lovable-uploads/9f4fe2ac-86a3-44bf-ab5c-466be35b79be.png";
 
@@ -59,7 +60,7 @@ const Index = () => {
       <div className="fixed inset-0 w-full h-full z-[-2]">
         <div 
           className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${backgroundImage})`, opacity: 0.15 }}
+          style={{ backgroundImage: `url(${backgroundImage})`, opacity: 0.075 }}
         />
         <div className="absolute inset-0 bg-[#729ffa]/30 z-[-1]"></div>
       </div>

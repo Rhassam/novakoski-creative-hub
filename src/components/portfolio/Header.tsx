@@ -55,7 +55,7 @@ const Header = ({ activeSection, scrollToSection }: HeaderProps) => {
       isScrolled ? "py-4 shadow-md shadow-[#729ffa]/15" : ""
     )}>
       <div className="container mx-auto px-6 flex justify-between items-center">
-        <div className="flex items-center gap-3 transition-all duration-300">
+        <div className="flex items-center gap-4 transition-all duration-300">
           {/* Logo placeholder - user can replace with actual logo */}
           <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 transition-transform duration-300 hover:scale-105">
             <img 
@@ -71,21 +71,35 @@ const Header = ({ activeSection, scrollToSection }: HeaderProps) => {
           
           <div className="overflow-hidden transition-all duration-500">
             <div className={cn(
-              "font-bold relative transition-all duration-500 whitespace-nowrap",
+              "font-bold relative transition-all duration-500 whitespace-nowrap flex items-center",
               "text-[#1C1C1C] font-['Montserrat_Alternates',sans-serif]",
               nameCompressed ? "text-xl" : "text-2xl"
             )}>
-              <span className={cn(
-                "inline-block transition-all duration-500",
-                nameCompressed 
-                  ? "max-w-0 opacity-0 -mr-1 transform translate-x-1/2" 
-                  : "max-w-[3rem] opacity-100 mr-1"
+              <div className={cn(
+                "flex overflow-hidden transition-all duration-500",
+                nameCompressed ? "w-[1ch]" : "w-[4ch]"
               )}>
-                Sam
-              </span>
-              <span className="text-[#729ffa] transition-all duration-500 inline-block">
-                {nameCompressed ? "SN" : "Novakoski"}
-              </span>
+                <span className="text-[#729ffa] min-w-[1ch] flex-shrink-0">S</span>
+                <span className={cn(
+                  "transition-all duration-500 origin-left",
+                  nameCompressed ? "max-w-0 opacity-0 scale-x-0" : "max-w-[3ch] opacity-100 scale-x-100"
+                )}>
+                  am
+                </span>
+              </div>
+              <div className="mx-1"></div> {/* Espaço entre os nomes */}
+              <div className={cn(
+                "flex overflow-hidden transition-all duration-500",
+                nameCompressed ? "w-[1ch]" : "w-[9ch]"
+              )}>
+                <span className="text-[#729ffa] min-w-[1ch] flex-shrink-0">N</span>
+                <span className={cn(
+                  "transition-all duration-500 origin-left",
+                  nameCompressed ? "max-w-0 opacity-0 scale-x-0" : "max-w-[8ch] opacity-100 scale-x-100"
+                )}>
+                  ovakoski
+                </span>
+              </div>
             </div>
           </div>
         </div>
