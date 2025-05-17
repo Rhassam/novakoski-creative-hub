@@ -68,37 +68,41 @@ const Header = ({ activeSection, scrollToSection }: HeaderProps) => {
             />
           </div>
           
-          <div className="ml-3 transition-all duration-500">
+          {/* Versão 1: Efeito de deslizamento 3D */}
+          <div className="ml-3 perspective-[500px] transition-all duration-500">
             <div className={cn(
               "font-bold transition-all duration-500 whitespace-nowrap",
               "font-['Montserrat_Alternates',sans-serif]",
               nameCompressed ? "text-xl" : "text-2xl"
             )}>
-              {/* Combined name animation with proper contraction */}
-              <div className="flex items-center">
-                {/* First name (Sam) - in black */}
+              <div className="flex items-center relative">
+                {/* Sam in black with 3D transform */}
                 <div className="flex overflow-visible">
                   <span className="text-[#1C1C1C]">S</span>
                   <div className={cn(
-                    "overflow-visible transition-all duration-500 transform-origin-left",
-                    nameCompressed ? "w-0 opacity-0" : "w-auto opacity-100"
+                    "overflow-visible transition-all duration-500",
+                    nameCompressed 
+                      ? "w-0 opacity-0 transform -translate-y-1 translate-z-0 rotateX-45" 
+                      : "w-auto opacity-100 transform translate-y-0 translate-z-0 rotateX-0"
                   )}>
                     <span className="text-[#1C1C1C] whitespace-nowrap">am</span>
                   </div>
                 </div>
                 
-                {/* Space between names that disappears when compressed */}
+                {/* Space between names */}
                 <div className={cn(
                   "transition-all duration-500",
                   nameCompressed ? "w-0" : "w-2"
                 )}></div>
                 
-                {/* Last name (Novakoski) - in blue */}
+                {/* Novakoski in blue with 3D transform */}
                 <div className="flex overflow-visible">
                   <span className="text-[#729ffa]">N</span>
                   <div className={cn(
-                    "overflow-visible transition-all duration-500 transform-origin-left",
-                    nameCompressed ? "w-0 opacity-0" : "w-auto opacity-100"
+                    "overflow-visible transition-all duration-500",
+                    nameCompressed 
+                      ? "w-0 opacity-0 transform -translate-y-1 translate-z-0 rotateX-45" 
+                      : "w-auto opacity-100 transform translate-y-0 translate-z-0 rotateX-0"
                   )}>
                     <span className="text-[#729ffa] whitespace-nowrap">ovakoski</span>
                   </div>
@@ -106,6 +110,181 @@ const Header = ({ activeSection, scrollToSection }: HeaderProps) => {
               </div>
             </div>
           </div>
+          
+          {/* 
+          Descomente a versão que quiser usar e comente as outras
+          
+          // Versão 2: Efeito de escala gradual
+          <div className="ml-3 transition-all duration-500">
+            <div className={cn(
+              "font-bold transition-all duration-500 whitespace-nowrap",
+              "font-['Montserrat_Alternates',sans-serif]",
+              nameCompressed ? "text-xl" : "text-2xl"
+            )}>
+              <div className="flex items-center">
+                <div className="flex overflow-visible">
+                  <span className="text-[#1C1C1C]">S</span>
+                  <div className={cn(
+                    "overflow-visible inline-flex transition-all duration-500 origin-left",
+                    nameCompressed ? "w-0 scale-x-0" : "w-auto scale-x-100"
+                  )}>
+                    <span className="text-[#1C1C1C] whitespace-nowrap">am</span>
+                  </div>
+                </div>
+                
+                <div className={cn(
+                  "transition-all duration-500",
+                  nameCompressed ? "w-0" : "w-2"
+                )}></div>
+                
+                <div className="flex overflow-visible">
+                  <span className="text-[#729ffa]">N</span>
+                  <div className={cn(
+                    "overflow-visible inline-flex transition-all duration-500 origin-left",
+                    nameCompressed ? "w-0 scale-x-0" : "w-auto scale-x-100"
+                  )}>
+                    <span className="text-[#729ffa] whitespace-nowrap">ovakoski</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          */}
+          
+          {/*
+          // Versão 3: Efeito de blur e transformação
+          <div className="ml-3 transition-all duration-500">
+            <div className={cn(
+              "font-bold transition-all duration-500 whitespace-nowrap",
+              "font-['Montserrat_Alternates',sans-serif]",
+              nameCompressed ? "text-xl" : "text-2xl"
+            )}>
+              <div className="flex items-center">
+                <div className="flex overflow-visible">
+                  <span className="text-[#1C1C1C] relative z-10">S</span>
+                  <div className={cn(
+                    "overflow-visible transition-all duration-500",
+                    nameCompressed 
+                      ? "w-0 opacity-0 -translate-x-2 blur-sm" 
+                      : "w-auto opacity-100 translate-x-0 blur-0"
+                  )}>
+                    <span className="text-[#1C1C1C] whitespace-nowrap">am</span>
+                  </div>
+                </div>
+                
+                <div className={cn(
+                  "transition-all duration-500",
+                  nameCompressed ? "w-0" : "w-2"
+                )}></div>
+                
+                <div className="flex overflow-visible">
+                  <span className="text-[#729ffa] relative z-10">N</span>
+                  <div className={cn(
+                    "overflow-visible transition-all duration-500",
+                    nameCompressed 
+                      ? "w-0 opacity-0 -translate-x-2 blur-sm" 
+                      : "w-auto opacity-100 translate-x-0 blur-0"
+                  )}>
+                    <span className="text-[#729ffa] whitespace-nowrap">ovakoski</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          */}
+          
+          {/*
+          // Versão 4: Efeito de caracteres que desaparecem em sequência
+          <div className="ml-3 transition-all duration-500">
+            <div className={cn(
+              "font-bold transition-all duration-500 whitespace-nowrap",
+              "font-['Montserrat_Alternates',sans-serif]",
+              nameCompressed ? "text-xl" : "text-2xl"
+            )}>
+              <div className="flex items-center">
+                <span className="text-[#1C1C1C]">S</span>
+                
+                <div className="relative">
+                  <span className={cn(
+                    "text-[#1C1C1C] transition-all duration-300",
+                    nameCompressed ? "opacity-0 absolute" : "opacity-100"
+                  )}>a</span>
+                </div>
+                
+                <div className="relative">
+                  <span className={cn(
+                    "text-[#1C1C1C] transition-all duration-300 delay-75",
+                    nameCompressed ? "opacity-0 absolute" : "opacity-100"
+                  )}>m</span>
+                </div>
+                
+                <div className={cn(
+                  "transition-all duration-200",
+                  nameCompressed ? "w-0" : "w-2"
+                )}></div>
+                
+                <span className="text-[#729ffa]">N</span>
+                
+                <div className="relative">
+                  <span className={cn(
+                    "text-[#729ffa] transition-all duration-300",
+                    nameCompressed ? "opacity-0 absolute" : "opacity-100"
+                  )}>o</span>
+                </div>
+                
+                <div className="relative">
+                  <span className={cn(
+                    "text-[#729ffa] transition-all duration-300 delay-75",
+                    nameCompressed ? "opacity-0 absolute" : "opacity-100"
+                  )}>v</span>
+                </div>
+                
+                <div className="relative">
+                  <span className={cn(
+                    "text-[#729ffa] transition-all duration-300 delay-150",
+                    nameCompressed ? "opacity-0 absolute" : "opacity-100"
+                  )}>a</span>
+                </div>
+                
+                <div className="relative">
+                  <span className={cn(
+                    "text-[#729ffa] transition-all duration-300 delay-225",
+                    nameCompressed ? "opacity-0 absolute" : "opacity-100"
+                  )}>k</span>
+                </div>
+                
+                <div className="relative">
+                  <span className={cn(
+                    "text-[#729ffa] transition-all duration-300 delay-300",
+                    nameCompressed ? "opacity-0 absolute" : "opacity-100"
+                  )}>o</span>
+                </div>
+                
+                <div className="relative">
+                  <span className={cn(
+                    "text-[#729ffa] transition-all duration-300 delay-375",
+                    nameCompressed ? "opacity-0 absolute" : "opacity-100"
+                  )}>s</span>
+                </div>
+                
+                <div className="relative">
+                  <span className={cn(
+                    "text-[#729ffa] transition-all duration-300 delay-450",
+                    nameCompressed ? "opacity-0 absolute" : "opacity-100"
+                  )}>k</span>
+                </div>
+                
+                <div className="relative">
+                  <span className={cn(
+                    "text-[#729ffa] transition-all duration-300 delay-525",
+                    nameCompressed ? "opacity-0 absolute" : "opacity-100"
+                  )}>i</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          */}
+          
         </div>
         
         {/* Mobile Menu Button */}
