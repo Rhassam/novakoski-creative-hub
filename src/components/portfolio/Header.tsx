@@ -53,8 +53,8 @@ const Header = ({ activeSection, scrollToSection }: HeaderProps) => {
       "bg-white", // Always white background
       isScrolled ? "py-4 shadow-md shadow-[#729ffa]/15" : ""
     )}>
-      <div className="container mx-auto px-6 flex justify-between items-center">
-        <div className="flex items-center gap-4 transition-all duration-300">
+      <div className="container mx-auto px-12 flex justify-between items-center">
+        <div className="flex items-center transition-all duration-300">
           {/* Logo placeholder - user can replace with actual logo */}
           <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 transition-transform duration-300 hover:scale-105">
             <img 
@@ -69,7 +69,7 @@ const Header = ({ activeSection, scrollToSection }: HeaderProps) => {
           </div>
           
           {/* Versão 3: Efeito de blur e transformação */}
-          <div className="ml-3 transition-all duration-500">
+          <div className="ml-1 transition-all duration-500">
             <div className={cn(
               "font-bold transition-all duration-500 whitespace-nowrap",
               "font-['Montserrat_Alternates',sans-serif]",
