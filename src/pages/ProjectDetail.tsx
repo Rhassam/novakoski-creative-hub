@@ -357,7 +357,7 @@ const ProjectDetail = () => {
               <div className="aspect-video w-full">
                 <iframe
                   className="w-full h-full rounded-lg"
-                  src={`https://www.youtube.com/embed/${getYoutubeVideoId(selectedMedia.url)}?autoplay=1&rel=0&loop=1&playlist=${getYoutubeVideoId(selectedMedia.url)}`}
+                  src="https://res.cloudinary.com/ddd2hdf49/video/upload/v1747517841/xspvpggkh9r8bj1u5qrq.mp4"
                   title="YouTube video player"
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
